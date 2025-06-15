@@ -319,7 +319,7 @@ namespace ledmatrixxy {
          * Shows all LEDs to a given color (range 0-255 for r, g, b). 
          * @param rgb RGB color of the LED
          */
-        //% blockId="ledmatrixxy_set_strip_color" block="%lexmatrixxy|show color %rgb=ledmatrixxy_colors" 
+        //% blockId="ledmatrixxy_set_strip_color" block="%ledmatrixxy|show color %rgb=ledmatrixxy_colors" 
         //% weight=85 blockGap=8
         //% parts="ledmatrixxy"
         showColor(rgb: number) {
@@ -354,7 +354,7 @@ namespace ledmatrixxy {
          * Set multiple color. 
          * @param yes is multiple color for each light?
          */
-        //% blockId="ledmatrixxy_set_multi_color" block="%lexmatrixxy|Set each light with multiple color: %yes" 
+        //% blockId="ledmatrixxy_set_multi_color" block="%ledmatrixxy|Set each light with multiple color: %yes" 
         //% weight=12 blockGap=8
         //% parts="ledmatrixxy"
         setMultiColor(yes: boolean) {
@@ -380,7 +380,7 @@ namespace ledmatrixxy {
          * @param input LED ColorIcon
          * @param rgb RGB color of the LED
          */
-        //% blockId="lexmatrixxy_show_color_icon" block="%lexmatrixxy|show ledmatrixxy Icon %myicon|with %rgb=ledmatrixxy_colors" 
+        //% blockId="ledmatrixxy_show_color_icon" block="%ledmatrixxy|show ledmatrixxy Icon %myicon|with %rgb=ledmatrixxy_colors" 
         //% blockGap=8
         //% weight=100
         //% parts="ledmatrixxy"
@@ -446,7 +446,7 @@ namespace ledmatrixxy {
          * @param input LED string showing
          * @param rgb RGB color of the LED
          */
-        //% blockId="lexmatrixxy_show_string_color" block="%lexmatrixxy|show ledmatrixxy string %input|with %rgb=ledmatrixxy_colors" 
+        //% blockId="ledmatrixxy_show_string_color" block="%ledmatrixxy|show ledmatrixxy string %input|with %rgb=ledmatrixxy_colors" 
         //% blockGap=8
         //% weight=100
         //% parts="ledmatrixxy"
@@ -525,7 +525,7 @@ namespace ledmatrixxy {
          * @param input LED string showing
          * @param rgb RGB color of the LED
          */
-        //% blockId="lexmatrixxy_show_scrollstring_color" block="%lexmatrixxy|show ledmatrixxy scroll string %input|with %rgb=ledmatrixxy_colors" 
+        //% blockId="ledmatrixxy_show_scrollstring_color" block="%ledmatrixxy|show ledmatrixxy scroll string %input|with %rgb=ledmatrixxy_colors" 
         //% blockGap=8
         //% weight=99
         //% parts="ledmatrixxy"
@@ -583,7 +583,7 @@ namespace ledmatrixxy {
          * @param input LED number showing
          * @param rgb RGB color of the LED
          */
-        //% blockId="lexmatrixxy_show_int_color" block="%lexmatrixxy|show ledmatrixxy number %input|with %rgb=ledmatrixxy_colors" 
+        //% blockId="ledmatrixxy_show_int_color" block="%ledmatrixxy|show ledmatrixxy number %input|with %rgb=ledmatrixxy_colors" 
         //% blockGap=8
         //% weight=100
         //% parts="ledmatrixxy"
@@ -614,7 +614,7 @@ namespace ledmatrixxy {
          * @param input LED int showing
          * @param rgb RGB color of the LED
          */
-        //% blockId="lexmatrixxy_show_scrollint_color" block="%lexmatrixxy|show ledmatrixxy scroll int %input|with %rgb=ledmatrixxy_colors" 
+        //% blockId="ledmatrixxy_show_scrollint_color" block="%ledmatrixxy|show ledmatrixxy scroll int %input|with %rgb=ledmatrixxy_colors" 
         //% blockGap=8
         //% weight=99
         //% parts="ledmatrixxy"
@@ -648,7 +648,7 @@ namespace ledmatrixxy {
          * @param y horizontal position
          * @param rgb RGB color of the LED
          */
-        //% blockId="ledmatrixxy_draw_ledmatrixxy" block="%lexmatrixxy|draw ledmatrixxy at x %x|y %y|to %rgb=ledmatrixxy_colors" 
+        //% blockId="ledmatrixxy_draw_ledmatrixxy" block="%ledmatrixxy|draw ledmatrixxy at x %x|y %y|to %rgb=ledmatrixxy_colors" 
         //% weight=20
         //% parts="ledmatrixxy"
         drawledmatrixxy(x: number, y: number, rgb: number) {
@@ -667,7 +667,7 @@ namespace ledmatrixxy {
          * @param startHue the start hue value for the rainbow, eg: 1
          * @param endHue the end hue value for the rainbow, eg: 360
          */
-        //% blockId="ledmatrixxy_set_strip_rainbow" block="%lexmatrixxy|show rainbow from %startHue|to %endHue" 
+        //% blockId="ledmatrixxy_set_strip_rainbow" block="%ledmatrixxy|show rainbow from %startHue|to %endHue" 
         //% weight=85 blockGap=8
         //% parts="ledmatrixxy"
         //% advanced=true
@@ -735,7 +735,7 @@ namespace ledmatrixxy {
          * @param high maximum value, eg: 255
          */
         //% weight=84
-        //% blockId=ledmatrixxy_show_bar_graph block="%lexmatrixxy|show bar graph of %value|up to %high" 
+        //% blockId=ledmatrixxy_show_bar_graph block="%ledmatrixxy|show bar graph of %value|up to %high" 
         //% icon="\uf080"
         //% parts="ledmatrixxy" advanced=true
         showBarGraph(value: number, high: number): void {
@@ -772,7 +772,7 @@ namespace ledmatrixxy {
          * @param pixeloffset position of the NeoPixel in the strip
          * @param rgb RGB color of the LED
          */
-        //% blockId="ledmatrixxy_set_pixel_color" block="%lexmatrixxy|set pixel color at %pixeloffset|to %rgb=ledmatrixxy_colors" 
+        //% blockId="ledmatrixxy_set_pixel_color" block="%ledmatrixxy|set pixel color at %pixeloffset|to %rgb=ledmatrixxy_colors" 
         //% blockGap=8
         //% weight=80
         //% parts="ledmatrixxy" advanced=true
@@ -784,7 +784,7 @@ namespace ledmatrixxy {
          * Sets the number of pixels in a matrix shaped strip
          * @param width number of pixels in a row
          */
-        //% blockId=ledmatrixxy_set_matrix_width block="%lexmatrixxy|set matrix width %width"
+        //% blockId=ledmatrixxy_set_matrix_width block="%ledmatrixxy|set matrix width %width"
         //% blockGap=8
         //% weight=5
         //% parts="ledmatrixxy" advanced=true
@@ -799,7 +799,7 @@ namespace ledmatrixxy {
          * @param y horizontal position
          * @param rgb RGB color of the LED
          */
-        //% blockId="ledmatrixxy_set_matrix_color" block="%lexmatrixxy|set matrix color at x %x|y %y|to %rgb=ledmatrixxy_colors" 
+        //% blockId="ledmatrixxy_set_matrix_color" block="%ledmatrixxy|set matrix color at x %x|y %y|to %rgb=ledmatrixxy_colors" 
         //% weight=4
         //% parts="ledmatrixxy" advanced=true
         setMatrixColor(x: number, y: number, rgb: number) {
@@ -818,7 +818,7 @@ namespace ledmatrixxy {
          * @param pixeloffset position of the LED in the strip
          * @param white brightness of the white LED
          */
-        //% blockId="ledmatrixxy_set_pixel_white" block="%lexmatrixxy|set pixel white LED at %pixeloffset|to %white" 
+        //% blockId="ledmatrixxy_set_pixel_white" block="%ledmatrixxy|set pixel white LED at %pixeloffset|to %white" 
         //% blockGap=8
         //% weight=80
         //% parts="ledmatrixxy" advanced=true
@@ -831,7 +831,7 @@ namespace ledmatrixxy {
         /** 
          * Send all the changes to the strip.
          */
-        //% blockId="ledmatrixxy_show" block="%lexmatrixxy|show" blockGap=8
+        //% blockId="ledmatrixxy_show" block="%ledmatrixxy|show" blockGap=8
         //% weight=79 advanced=true
         //% parts="ledmatrixxy"
         show() {
@@ -842,7 +842,7 @@ namespace ledmatrixxy {
          * Turn off all LEDs.
          * You need to call ``show`` to make the changes visible.
          */
-        //% blockId="ledmatrixxy_clear" block="%lexmatrixxy|clear"
+        //% blockId="ledmatrixxy_clear" block="%ledmatrixxy|clear"
         //% weight=76
         //% parts="ledmatrixxy"
         clear(): void {
@@ -854,7 +854,7 @@ namespace ledmatrixxy {
         /**
          * Gets the number of pixels declared on the strip
          */
-        //% blockId="ledmatrixxy_length" block="%lexmatrixxy|length" blockGap=8
+        //% blockId="ledmatrixxy_length" block="%ledmatrixxy|length" blockGap=8
         //% weight=60 advanced=true
         length() {
             return this._length;
@@ -864,7 +864,7 @@ namespace ledmatrixxy {
          * Set the brightness of the strip. This flag only applies to future operation.
          * @param brightness a measure of LED brightness in 0-255. eg: 255
          */
-        //% blockId="ledmatrixxy_set_brightness" block="%lexmatrixxy|set brightness %brightness" blockGap=8
+        //% blockId="ledmatrixxy_set_brightness" block="%ledmatrixxy|set brightness %brightness" blockGap=8
         //% weight=59
         //% parts="ledmatrixxy" advanced=true
         setBrightness(brightness: number): void {
@@ -874,7 +874,7 @@ namespace ledmatrixxy {
         /**
          * Apply brightness to current colors using a quadratic easing function.
          **/
-        //% blockId="ledmatrixxy_each_brightness" block="%lexmatrixxy|ease brightness" blockGap=8
+        //% blockId="ledmatrixxy_each_brightness" block="%ledmatrixxy|ease brightness" blockGap=8
         //% weight=58
         //% parts="ledmatrixxy" advanced=true
         easeBrightness(): void {
@@ -905,7 +905,7 @@ namespace ledmatrixxy {
          * @param length number of LEDs in the range. eg: 4
          */
         //% weight=89
-        //% blockId="ledmatrixxy_range" block="%lexmatrixxy|range from %start|with %length|leds"
+        //% blockId="ledmatrixxy_range" block="%ledmatrixxy|range from %start|with %length|leds"
         //% parts="ledmatrixxy"
         //% blockSetVariable=range
         //% advanced=true
@@ -929,7 +929,7 @@ namespace ledmatrixxy {
          * You need to call ``show`` to make the changes visible.
          * @param offset number of pixels to shift forward, eg: 1
          */
-        //% blockId="ledmatrixxy_shift" block="%lexmatrixxy|shift pixels by %offset" blockGap=8
+        //% blockId="ledmatrixxy_shift" block="%ledmatrixxy|shift pixels by %offset" blockGap=8
         //% weight=40
         //% parts="ledmatrixxy"
         //% advanced=true
@@ -944,7 +944,7 @@ namespace ledmatrixxy {
          * You need to call ``show`` to make the changes visible.
          * @param offset number of pixels to rotate forward, eg: 1
          */
-        //% blockId="ledmatrixxy_rotate" block="%lexmatrixxy|rotate pixels by %offset" blockGap=8
+        //% blockId="ledmatrixxy_rotate" block="%ledmatrixxy|rotate pixels by %offset" blockGap=8
         //% weight=39
         //% parts="ledmatrixxy"
         //% advanced=true
@@ -968,7 +968,7 @@ namespace ledmatrixxy {
         /**
          * Estimates the electrical current (mA) consumed by the current light configuration.
          */
-        //% weight=9 blockId=ledmatrixxy_power block="%lexmatrixxy|power (mA)"
+        //% weight=9 blockId=ledmatrixxy_power block="%ledmatrixxy|power (mA)"
         //% advanced=true
         power(): number {
             const stride = this._mode === BitColorMode.RGBW ? 4 : 3;
@@ -990,7 +990,7 @@ namespace ledmatrixxy {
          * @param rgbFront Front RGB color of the LED
          * @param rgbBackground rgbBackground RGB color of the LED
          */
-        //% blockId="lexmatrixxy_show_whaleysansfont_color" block="%lexmatrixxy|show ledmatrixxy WhaleySansFont number %dat|with front %rgbFront=ledmatrixxy_colors|with background %rgbBackground=ledmatrixxy_colors" 
+        //% blockId="ledmatrixxy_show_whaleysansfont_color" block="%ledmatrixxy|show ledmatrixxy WhaleySansFont number %dat|with front %rgbFront=ledmatrixxy_colors|with background %rgbBackground=ledmatrixxy_colors" 
         //% blockGap=8
         //% weight=11
         //% parts="ledmatrixxy"
@@ -1106,7 +1106,7 @@ namespace ledmatrixxy {
     //% weight=90 blockGap=8
     //% parts="ledmatrixxy"
     //% trackArgs=0,2
-    //% blockSetVariable=lexmatrixxy
+    //% blockSetVariable=ledmatrixxy
     //% advanced=false
     export function create(pin: DigitalPin = DigitalPin.P0, numleds: number = 64, mode: BitColorMode): Strip {
         let strip = new Strip();
