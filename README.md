@@ -1,4 +1,4 @@
-# 51bit ColorBit driver
+# WIP - 8x8 and potentially X*Y LED Matrix driver for micro:bit
 
 ColorBit is a 5x5 WS2812B RGB LED matrix for micro:bit, the makecode extension code is based on https://github.com/Microsoft/pxt-neopixel and developed for 51bit ColorBit board.
 
