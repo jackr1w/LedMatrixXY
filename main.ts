@@ -485,7 +485,7 @@ namespace ledmatrixxy {
     /**
      * Create a new LedMatrixXY driver for `numleds` LEDs.
      * @param pin the pin where the ledmatrixxy is connected.
-     * @param numleds number of leds in the strip, eg: 64,24,30,60
+     * @param numleds number of leds in the strip, eg: 64
      */
     //% blockId="ledmatrixxy_create" block="LedMatrixXY at pin %pin|with %numleds|leds as %mode"
     //% weight=90 blockGap=8
