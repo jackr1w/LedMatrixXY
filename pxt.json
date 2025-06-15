@@ -1,7 +1,7 @@
 {
-    "name": "colorbit",
-    "version": "0.1.4",
-    "description": "51bit ColorBit",
+    "name": "ledmatrixxy",
+    "version": "0.0.1",
+    "description": "LED Matrix X*Y",
     "license": "MIT",
     "dependencies": {
         "core": "*",
