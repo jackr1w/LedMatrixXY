@@ -909,7 +909,7 @@ namespace colorbit {
         //% parts="colorbit"
         //% blockSetVariable=range
         //% advanced=true
-        range(start: number = 0, length: number = 25): Strip {
+        range(start: number = 0, length: number = 64): Strip {
             start = start >> 0;
             length = length >> 0;
             let strip = new Strip();
@@ -1108,14 +1108,14 @@ namespace colorbit {
     //% trackArgs=0,2
     //% blockSetVariable=colorbit_51bit
     //% advanced=true
-    export function create(pin: DigitalPin = DigitalPin.P0, numleds: number = 25, mode: BitColorMode): Strip {
+    export function create(pin: DigitalPin = DigitalPin.P0, numleds: number = 64, mode: BitColorMode): Strip {
         let strip = new Strip();
         let stride = mode === BitColorMode.RGBW ? 4 : 3;
         strip.buf = pins.createBuffer(numleds * stride);
         strip.start = 0;
         strip._length = numleds;
         strip._mode = mode;
-        strip._matrixWidth = 0;
+        strip._matrixWidth = 8;
         strip.setBrightness(16);
         strip.setPin(pin);
         strip.ismulticolor=false;
@@ -1123,30 +1123,6 @@ namespace colorbit {
         return strip;
     }
     
-    /**
-     * Init colorbit.
-     * @param pin the pin where the colorbit is connected.
-     */
-    //% blockId="colorbit_initcolorbit" block="ColorBit leds at pin %pin| as %mode"
-    //% weight=101 blockGap=8
-    //% parts="colorbit"
-    //% trackArgs=0,2
-    //% blockSetVariable=colorbit_51bit
-    export function initColorBit(pin: DigitalPin = DigitalPin.P0, mode: BitColorMode): Strip {
-        let strip = new Strip();
-        let stride = mode === BitColorMode.RGBW ? 4 : 3;
-        strip.buf = pins.createBuffer(25 * stride);
-        strip.start = 0;
-        strip._length = 25;
-        strip._mode = mode;
-        strip._matrixWidth = 0;
-        strip.setBrightness(16);
-        strip.setPin(pin);
-        strip.ismulticolor=false;
-        strip.lastcolor=BitColors.Red;
-        return strip;
-    }
-
     /**
      * Converts red, green, blue channels into a RGB color
      * @param red value of the red channel between 0 and 255. eg: 255
