@@ -188,7 +188,7 @@ namespace ledmatrixxy {
             this.setPixelRGB(pixeloffset >> 0, rgb >> 0);
         }
 
-        /**
+        /** TODO willb1 - update to allow "true" matrix or "snake" matrix type
          * Sets the number of pixels in a matrix shaped strip
          * @param width number of pixels in a row
          */
@@ -201,7 +201,7 @@ namespace ledmatrixxy {
             this._matrixWidth = Math.min(this._length, width >> 0);
         }
 
-        /**
+        /** TODO willb1 - update to allow "true" matrix or "snake" matrix type
          * Set LED to a given color (range 0-255 for r, g, b) in a matrix shaped strip
          * You need to call ``show`` to make the changes visible.
          * @param x horizontal position
@@ -252,7 +252,7 @@ namespace ledmatrixxy {
             ws2812b.sendBuffer(this.buf, this.pin);
         }
 
-        /**
+        /** TODO willb1 - consider implementing a true reset procedure
          * Turn off all LEDs.
          * You need to call ``show`` to make the changes visible.
          */
