@@ -53,6 +53,7 @@ namespace ledmatrixxy {
         _length: number; // number of LEDs
         _mode: LedMatrixXYMode;
         _matrixWidth: number; // number of leds in a matrix - if any
+        _matrixSnake: boolean; // if the matrix is implemented in a snake form, each row starting where the previous ended
 
         /**
          * Shows all LEDs to a given color (range 0-255 for r, g, b).
@@ -188,7 +189,7 @@ namespace ledmatrixxy {
             this.setPixelRGB(pixeloffset >> 0, rgb >> 0);
         }
 
-        /** TODO willb1 - update to allow "true" matrix or "snake" matrix type
+        /**
          * Sets the number of pixels in a matrix shaped strip
          * @param width number of pixels in a row
          */
@@ -197,11 +198,12 @@ namespace ledmatrixxy {
         //% blockGap=8
         //% weight=5
         //% parts="ledmatrixxy" advanced=true
-        setMatrixWidth(width: number) {
+        setMatrix(width: number, snakeMatrix: boolean = false) {
             this._matrixWidth = Math.min(this._length, width >> 0);
+            this._matrixSnake = snakeMatrix;
         }
 
-        /** TODO willb1 - update to allow "true" matrix or "snake" matrix type
+        /**
          * Set LED to a given color (range 0-255 for r, g, b) in a matrix shaped strip
          * You need to call ``show`` to make the changes visible.
          * @param x horizontal position
@@ -217,9 +219,11 @@ namespace ledmatrixxy {
             x = x >> 0;
             y = y >> 0;
             rgb = rgb >> 0;
+            // Handle snaked wiring: flip x index on every odd row
             const cols = Math.idiv(this._length, this._matrixWidth);
             if (x < 0 || x >= this._matrixWidth || y < 0 || y >= cols) return;
-            let i = x + y * this._matrixWidth;
+            let trueX = (this._matrixSnake && (y % 2 == 1)) ? (this._matrixWidth - 1 - x) : x
+            let i = trueX + y * this._matrixWidth;
             this.setPixelColor(i, rgb);
         }
 
@@ -252,7 +256,7 @@ namespace ledmatrixxy {
             ws2812b.sendBuffer(this.buf, this.pin);
         }
 
-        /** TODO willb1 - consider implementing a true reset procedure
+        /** TODO - jackr1w - consider implementing a true reset procedure
          * Turn off all LEDs.
          * You need to call ``show`` to make the changes visible.
          */
@@ -334,7 +338,7 @@ namespace ledmatrixxy {
             strip.brightness = this.brightness;
             strip.start = this.start + Math.clamp(0, this._length - 1, start);
             strip._length = Math.clamp(0, this._length - (strip.start - this.start), length);
-            strip._matrixWidth = 0;
+            //strip._matrixWidth = 0; TODO - jackr1w - enable ranging modes: raw, rows, columns, etc
             strip._mode = this._mode;
             return strip;
         }
