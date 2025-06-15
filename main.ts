@@ -1,5 +1,5 @@
 /**
- * Well known colors for a LedMatrixXY strip
+ * Well known colors for a LED Matrix
  */
 enum LedMatrixXYColors {
     //% block=red
@@ -25,7 +25,7 @@ enum LedMatrixXYColors {
 }
 
 /**
- * Different modes for RGB or RGB+W LedMatrixXY strips
+ * Different modes for RGB or RGB+W LED Matrixes
  */
 enum LedMatrixXYMode {
     //% block="RGB (GRB format)"
@@ -37,12 +37,12 @@ enum LedMatrixXYMode {
 }
 
 /**
- * Functions to operate LedMatrixXY strips.
+ * Functions to operate LED Matrixes.
  */
 //% weight=5 color=#2699BF icon="\uf110"
 namespace ledmatrixxy {
     /**
-     * A LedMatrixXY strip
+     * A LED Matrix
      */
     export class Strip {
         buf: Buffer;
@@ -492,7 +492,7 @@ namespace ledmatrixxy {
     //% parts="ledmatrixxy"
     //% trackArgs=0,2
     //% blockSetVariable=strip
-    export function create(pin: DigitalPin, numleds: number, mode: LedMatrixXYMode): Strip {
+    export function create(pin: DigitalPin, numleds: number = 64, mode: LedMatrixXYMode): Strip {
         let strip = new Strip();
         let stride = mode === LedMatrixXYMode.RGBW ? 4 : 3;
         strip.buf = pins.createBuffer(numleds * stride);
