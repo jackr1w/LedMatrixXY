@@ -186,10 +186,10 @@ enum BitColorMode {
 }
 
 /**
- * Functions to operate NeoPixel strips.
+ * Functions to operate LED Matrix.
  */
 //% weight=5 color=#2699BF icon="\uf110"
-namespace colorbit {
+namespace ledmatrixxy {
     let FONTS = [
         [0x0,0x0],       //32: space
         [0x4210,0x400],  //33: !
