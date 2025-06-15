@@ -1100,9 +1100,9 @@ namespace ledmatrixxy {
     /**
      * Create a new NeoPixel driver for `numleds` LEDs.
      * @param pin the pin where the ledmatrixxy is connected.
-     * @param numleds number of leds in the strip, eg: 25
+     * @param numleds number of leds in the strip, eg: 64
      */
-    //% blockId="ledmatrixxy_create" block="NeoPixel at pin %pin|with %numleds|leds as %mode"
+    //% blockId="ledmatrixxy_create" block="LED Matrix at pin %pin|with %numleds|leds as %mode"
     //% weight=90 blockGap=8
     //% parts="ledmatrixxy"
     //% trackArgs=0,2
