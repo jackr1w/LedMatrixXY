@@ -51,14 +51,15 @@ namespace ledmatrixxy {
         private snake: boolean
         private matrix: number[][]
         private buffer: Buffer
-        private stride: number = 3
+        private stride: number
 
-        constructor(width: number, height: number, snake: boolean = true) {
+        constructor(width: number, height: number, snake: boolean = true, stride: number) {
             this.width = width
             this.height = height
             this.snake = snake
+            this.stride = stride
             this.matrix = this.createMatrix(width, height)
-            this.buffer = pins.createBuffer(width * height * this.stride)  // 3/4 bytes per RGB LED
+            this.buffer = pins.createBuffer(width * height * stride)  // 3/4 bytes per RGB LED
         }
 
         private createMatrix(w: number, h: number): number[][] {
@@ -145,11 +146,10 @@ namespace ledmatrixxy {
     //% trackArgs=0,2
     //% blockSetVariable=strip
     export function create(pin: DigitalPin, width: number = 8, length: number = 8, snake: boolean = true): LEDMatrix {
-        let matrix = new LEDMatrix(width, length, snake);
         //let stride = mode === LedMatrixXYMode.RGBW ? 4 : 3;
         let stride = 3; // TODO - jackr1w - implement LED operation modes
+        let matrix = new LEDMatrix(width, length, snake, stride);
         matrix.pin = pin
-        matrix.buffer = pins.createBuffer(width * height * stride)  // 3/4 bytes per RGB LED
         //strip.setBrightness(128)
         return matrix;
     }
