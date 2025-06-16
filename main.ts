@@ -40,7 +40,7 @@ enum LedMatrixXYMode {
  * Functions to operate LED Matrixes - rewritten from scratch.
  */
 //% weight=5 color=#FF7000 icon="\uf03e" blockGap=8
-//% groups='["Configuration", "Output"]'
+//% groups='["Configuration", "Output", "Variables"]'
 namespace ledmatrixxy {
     /**
      * A LED Matrix
@@ -115,10 +115,11 @@ namespace ledmatrixxy {
          * You need to call ``show`` to make the changes visible.
          * @param color Color to fill, e.g. 0x00FF00 for green
          */
-        //% blockId="ledmatrixxy_fill" block="%ledmatrix|fill with color %color"
+        //% blockId="ledmatrixxy_fill" block="%ledmatrix|fill with color %color=ledmatrixxy_colors"
         //% weight=78
         //% group="Configuration"
         //% parts="ledmatrixxy"
+        //% trackArgs=0
         //% blockGap=8
         fill(color: number): void {
             for (let y = 0; y < this.height; y++) {
@@ -189,9 +190,21 @@ namespace ledmatrixxy {
     */
     //% weight=2
     //% blockId="ledmatrixxy_colors" block="%color"
-    //% group="Configuration"
+    //% group="Variables"
     //% blockGap=8
     export function colors(color: LedMatrixXYColors): number {
+        return color;
+    }
+
+    /**
+     * Just a forwarder for replacing the predefined color selectors with custom value
+     * TODO - jackr1w - enhance to allow R,G,B separate inputs
+    */
+    //% weight=2
+    //% blockId="ledmatrixxy_customcolor" block="%color"
+    //% group="Variables"
+    //% blockGap=8
+    export function customcolor(color: number): number {
         return color;
     }
 
