@@ -81,10 +81,11 @@ namespace ledmatrixxy {
          * @param y Vertical position of the LED in the matrix
          * @param rgb Color, e.g. 0xFF0000 for red
          */
-        //% blockId="ledmatrixxy_set_pixel_color" block="%ledmatrix|set pixel at X %x|Y %y|to color %rgb=ledmatrixxy_colors"
-        //% weight=80
-        //% blockGap=8
-        //% parts="ledmatrixxy"
+        // blockId="ledmatrixxy_set_pixel_color" block="%ledmatrix|set pixel at X %x|Y %y|to color %rgb=ledmatrixxy_colors"
+        // weight=80
+        // parts="ledmatrixxy"
+        // trackArgs=0
+        // blockGap=8
         setPixel(x: number, y: number, rgb: number): void {
             if (x >= 0 && x < this.width && y >= 0 && y < this.height) {
                 this.matrix[y][x] = rgb
@@ -97,9 +98,10 @@ namespace ledmatrixxy {
          * @param matrix LEDMatrix object
          */
         //% blockId="ledmatrixxy_clear" block="%ledmatrix|clear"
-        //% weight=76
         //% blockGap=8
         //% parts="ledmatrixxy"
+        //% trackArgs=0
+        //% blockGap=8
         clear(): void {
             for (let y = 0; y < this.height; y++) {
                 for (let x = 0; x < this.width; x++) {
@@ -114,8 +116,9 @@ namespace ledmatrixxy {
          */
         //% blockId="ledmatrixxy_show" block="%ledmatrix|show"
         //% weight=79
-        //% blockGap=8
         //% parts="ledmatrixxy"
+        //% trackArgs=0
+        //% blockGap=8
         show(): void {
             let i = 0
             for (let y = 0; y < this.height; y++) {
@@ -148,10 +151,10 @@ namespace ledmatrixxy {
      */
     //% blockId="ledmatrixxy_create" block="LedMatrixXY at pin %pin|of width %width| and length %length|, snake-style %snake"
     //% weight=90
-    //% blockGap=8
     //% parts="ledmatrixxy"
     //% trackArgs=0,2
     //% blockSetVariable=ledmatrix
+    //% blockGap=8
     export function create(pin: DigitalPin, width: number = 8, length: number = 8, snake: boolean = true): LEDMatrix {
         //let stride = mode === LedMatrixXYMode.RGBW ? 4 : 3;
         let stride = 3; // TODO - jackr1w - implement LED operation modes
