@@ -46,8 +46,8 @@ namespace ledmatrixxy {
      */
     export class LEDMatrix {
         pin: DigitalPin
-        private width: number
-        private height: number
+        width: number
+        height: number
         private snake: boolean
         private matrix: number[][]
         private buffer: Buffer
