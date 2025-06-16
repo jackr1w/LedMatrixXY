@@ -58,7 +58,7 @@ namespace ledmatrixxy {
             this.height = height
             this.snake = snake
             this.matrix = this.createMatrix(width, height)
-            this.buffer = pins.createBuffer(width * height * stride)  // 3/4 bytes per RGB LED
+            this.buffer = pins.createBuffer(width * height * this.stride)  // 3/4 bytes per RGB LED
         }
 
         private createMatrix(w: number, h: number): number[][] {
