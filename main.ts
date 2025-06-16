@@ -145,15 +145,12 @@ namespace ledmatrixxy {
     //% trackArgs=0,2
     //% blockSetVariable=strip
     export function create(pin: DigitalPin, width: number = 8, length: number = 8, snake: boolean = true): LEDMatrix {
-        let matrix = new LEDMatrix();
+        let matrix = new LEDMatrix(width, length, snake);
         let stride = mode === LedMatrixXYMode.RGBW ? 4 : 3;
-        matrix.width = width
-        matrix.height = height
-        matrix.snake = snake
+        matrix.pin = pin
         matrix.buffer = pins.createBuffer(width * height * stride)  // 3/4 bytes per RGB LED
         //strip.setBrightness(128)
-        matrix.pin = pin
-        return strip;
+        return matrix;
     }
 
 
