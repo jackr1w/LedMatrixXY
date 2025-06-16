@@ -73,13 +73,13 @@ namespace ledmatrixxy {
             return mat
         }
     
-        private setPixel(x: number, y: number, rgb: number): void {
+        setPixel(x: number, y: number, rgb: number): void {
             if (x >= 0 && x < this.width && y >= 0 && y < this.height) {
                 this.matrix[y][x] = rgb
             }
         }
 
-        private clear(): void {
+        clear(): void {
             for (let y = 0; y < this.height; y++) {
                 for (let x = 0; x < this.width; x++) {
                     this.matrix[y][x] = 0x000000
@@ -87,7 +87,7 @@ namespace ledmatrixxy {
             }
         }
 
-        private show(): void {
+        show(): void {
             let i = 0
             for (let y = 0; y < this.height; y++) {
                 for (let x = 0; x < this.width; x++) {
@@ -105,6 +105,10 @@ namespace ledmatrixxy {
             ws2812b.sendBuffer(this.buffer, this.pin);
         }
     }
+
+    // -----------------------------------------------------------------------------------------------------
+    // Exported functions for MakeCode Blocks mode markup
+    // -----------------------------------------------------------------------------------------------------
 
     /**
      * Create a new LedMatrixXY driver for LED Matrix width*length.
