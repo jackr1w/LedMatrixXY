@@ -129,6 +129,7 @@ namespace ledmatrixxy {
                     this.buffer.setUint8(i++, b)
                 }
             }
+            
             ws2812b.sendBuffer(this.buffer, this.pin);
         }
     }
