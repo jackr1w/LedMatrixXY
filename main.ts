@@ -40,6 +40,7 @@ enum LedMatrixXYMode {
  * Functions to operate LED Matrixes - rewritten from scratch.
  */
 //% weight=5 color=#FF7000 icon="\uf03e" blockGap=8
+//% groups='["Configuration", "Output"]'
 namespace ledmatrixxy {
     /**
      * A LED Matrix
@@ -83,6 +84,7 @@ namespace ledmatrixxy {
          */
         // blockId="ledmatrixxy_set_pixel_color" block="%ledmatrix|set pixel at X %x|Y %y|to color %rgb=ledmatrixxy_colors"
         // weight=80
+        // group="Configuration"
         // parts="ledmatrixxy"
         // trackArgs=0
         // blockGap=8
@@ -98,7 +100,7 @@ namespace ledmatrixxy {
          * @param matrix LEDMatrix object
          */
         //% blockId="ledmatrixxy_clear" block="%ledmatrix|clear"
-        //% blockGap=8
+        //% group="Configuration"
         //% parts="ledmatrixxy"
         //% trackArgs=0
         //% blockGap=8
@@ -116,6 +118,7 @@ namespace ledmatrixxy {
          */
         //% blockId="ledmatrixxy_show" block="%ledmatrix|show"
         //% weight=79
+        //% group="Output"
         //% parts="ledmatrixxy"
         //% trackArgs=0
         //% blockGap=8
@@ -151,6 +154,7 @@ namespace ledmatrixxy {
      */
     //% blockId="ledmatrixxy_create" block="LedMatrixXY at pin %pin|of width %width| and length %length|, snake-style %snake"
     //% weight=90
+    //% group="Configuration"
     //% parts="ledmatrixxy"
     //% trackArgs=0,2
     //% blockSetVariable=ledmatrix
@@ -171,8 +175,9 @@ namespace ledmatrixxy {
      */
     //% blockId="ledmatrixxy_fill" block="%ledmatrix|fill with color %color"
     //% weight=78
-    //% blockGap=8
+    //% group="Configuration"
     //% parts="ledmatrixxy"
+    //% blockGap=8
     export function fill(matrix: LEDMatrix, color: number): void {
         for (let y = 0; y < matrix.height; y++) {
             for (let x = 0; x < matrix.width; x++) {
