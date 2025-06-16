@@ -37,10 +37,134 @@ enum LedMatrixXYMode {
 }
 
 /**
- * Functions to operate LED Matrixes.
+ * Functions to operate LED Matrixes - rewritten from scratch.
+ */
+//% weight=5 color=#FF7000 icon="\uf10a"
+namespace ledmatrixxy {
+    /**
+     * A LED Matrix
+     */
+    export class LEDMatrix {
+        pin: DigitalPin;
+        private width: number
+        private height: number
+        private snake: boolean
+        private matrix: number[][]
+        private buffer: Buffer
+        private stride: number = 3
+
+        constructor(width: number, height: number, snake: boolean = true) {
+            this.width = width
+            this.height = height
+            this.snake = snake
+            this.matrix = this.createMatrix(width, height)
+            this.buffer = pins.createBuffer(width * height * stride)  // 3/4 bytes per RGB LED
+        }
+
+        private createMatrix(w: number, h: number): number[][] {
+            let mat: number[][] = []
+            for (let y = 0; y < h; y++) {
+                mat[y] = []
+                for (let x = 0; x < w; x++) {
+                    mat[y][x] = 0x0  // off (black)
+                }
+            }
+            return mat
+        }
+    
+        /**
+         * Set LED to a given color (range 0-255 for r, g, b).
+         * You need to call ``show`` to make the changes visible.
+         * @param pixeloffset position of the LedMatrixXY in the strip
+         * @param rgb RGB color of the LED
+         */
+        //% blockId="ledmatrixxy_set_pixel_color" block="%strip|set pixel color at %pixeloffset|to %rgb=ledmatrixxy_colors"
+        //% strip.defl=strip
+        //% blockGap=8
+        //% weight=80
+        //% parts="ledmatrixxy" advanced=true
+        setPixel(x: number, y: number, rgb: number): void {
+            if (x >= 0 && x < this.width && y >= 0 && y < this.height) {
+                this.matrix[y][x] = rgb
+            }
+        }
+
+        /** TODO - jackr1w - consider implementing a true reset procedure
+         * Turn off all LEDs.
+         * You need to call ``show`` to make the changes visible.
+         */
+        //% blockId="ledmatrixxy_clear" block="%strip|clear"
+        //% strip.defl=strip
+        //% weight=76
+        //% parts="ledmatrixxy"
+        clear(): void {
+            for (let y = 0; y < this.height; y++) {
+                for (let x = 0; x < this.width; x++) {
+                    this.matrix[y][x] = 0x000000
+                }
+            }
+        }
+
+
+        /**
+         * Create the buffer and send it to the LED Matrix.
+         */
+        //% blockId="ledmatrixlegacy_show" block="%strip|show" blockGap=8
+        //% strip.defl=strip
+        //% weight=79
+        //% parts="ledmatrixlegacy"
+        show(): void {
+            let i = 0
+            for (let y = 0; y < this.height; y++) {
+                for (let x = 0; x < this.width; x++) {
+                    let col = this.snake && y % 2 ? (this.width - 1 - x) : x
+                    let rgb = this.matrix[y][col]
+                    // TODO - jackr1w - consider formats except GRB, including 4-byte one
+                    let r = (rgb >> 16) & 0xFF
+                    let g = (rgb >> 8) & 0xFF
+                    let b = rgb & 0xFF
+                    this.buffer.setUint8(i++, g)
+                    this.buffer.setUint8(i++, r)
+                    this.buffer.setUint8(i++, b)
+                }
+            }
+            ws2812b.sendBuffer(this.buffer, this.pin);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Functions to operate LED Matrixes - enhanced Neopixel strip.
  */
 //% weight=5 color=#2699BF icon="\uf110"
-namespace ledmatrixxy {
+namespace ledmatrixlegacy {
     /**
      * A LED Matrix
      */
@@ -59,10 +183,10 @@ namespace ledmatrixxy {
          * Shows all LEDs to a given color (range 0-255 for r, g, b).
          * @param rgb RGB color of the LED
          */
-        //% blockId="ledmatrixxy_set_strip_color" block="%strip|show color %rgb=ledmatrixxy_colors"
+        //% blockId="ledmatrixlegacy_set_strip_color" block="%strip|show color %rgb=ledmatrixlegacy_colors"
         //% strip.defl=strip
         //% weight=85 blockGap=8
-        //% parts="ledmatrixxy"
+        //% parts="ledmatrixlegacy"
         showColor(rgb: number) {
             rgb = rgb >> 0;
             this.setAllRGB(rgb);
@@ -74,10 +198,10 @@ namespace ledmatrixxy {
          * @param startHue the start hue value for the rainbow, eg: 1
          * @param endHue the end hue value for the rainbow, eg: 360
          */
-        //% blockId="ledmatrixxy_set_strip_rainbow" block="%strip|show rainbow from %startHue|to %endHue"
+        //% blockId="ledmatrixlegacy_set_strip_rainbow" block="%strip|show rainbow from %startHue|to %endHue"
         //% strip.defl=strip
         //% weight=85 blockGap=8
-        //% parts="ledmatrixxy"
+        //% parts="ledmatrixlegacy"
         showRainbow(startHue: number = 1, endHue: number = 360) {
             if (this._length <= 0) return;
 
@@ -142,10 +266,10 @@ namespace ledmatrixxy {
          * @param high maximum value, eg: 255
          */
         //% weight=84
-        //% blockId=ledmatrixxy_show_bar_graph block="%strip|show bar graph of %value|up to %high"
+        //% blockId=ledmatrixlegacy_show_bar_graph block="%strip|show bar graph of %value|up to %high"
         //% strip.defl=strip
         //% icon="\uf080"
-        //% parts="ledmatrixxy"
+        //% parts="ledmatrixlegacy"
         showBarGraph(value: number, high: number): void {
             if (high <= 0) {
                 this.clear();
@@ -166,7 +290,7 @@ namespace ledmatrixxy {
                 for (let i = 0; i < n; ++i) {
                     if (i <= v) {
                         const b = Math.idiv(i * 255, n1);
-                        this.setPixelColor(i, ledmatrixxy.rgb(b, 0, 255 - b));
+                        this.setPixelColor(i, ledmatrixlegacy.rgb(b, 0, 255 - b));
                     }
                     else this.setPixelColor(i, 0);
                 }
@@ -180,11 +304,11 @@ namespace ledmatrixxy {
          * @param pixeloffset position of the LedMatrixXY in the strip
          * @param rgb RGB color of the LED
          */
-        //% blockId="ledmatrixxy_set_pixel_color" block="%strip|set pixel color at %pixeloffset|to %rgb=ledmatrixxy_colors"
+        //% blockId="ledmatrixlegacy_set_pixel_color" block="%strip|set pixel color at %pixeloffset|to %rgb=ledmatrixlegacy_colors"
         //% strip.defl=strip
         //% blockGap=8
         //% weight=80
-        //% parts="ledmatrixxy" advanced=true
+        //% parts="ledmatrixlegacy" advanced=true
         setPixelColor(pixeloffset: number, rgb: number): void {
             this.setPixelRGB(pixeloffset >> 0, rgb >> 0);
         }
@@ -193,11 +317,11 @@ namespace ledmatrixxy {
          * Sets the number of pixels in a matrix shaped strip
          * @param width number of pixels in a row
          */
-        //% blockId=ledmatrixxy_set_matrix_width block="%strip|set matrix width %width"
+        //% blockId=ledmatrixlegacy_set_matrix_width block="%strip|set matrix width %width"
         //% strip.defl=strip
         //% blockGap=8
         //% weight=5
-        //% parts="ledmatrixxy" advanced=true
+        //% parts="ledmatrixlegacy" advanced=true
         setMatrix(width: number, snakeMatrix: boolean = false) {
             this._matrixWidth = Math.min(this._length, width >> 0);
             this._matrixSnake = snakeMatrix;
@@ -210,10 +334,10 @@ namespace ledmatrixxy {
          * @param y horizontal position
          * @param rgb RGB color of the LED
          */
-        //% blockId="ledmatrixxy_set_matrix_color" block="%strip|set matrix color at x %x|y %y|to %rgb=ledmatrixxy_colors"
+        //% blockId="ledmatrixlegacy_set_matrix_color" block="%strip|set matrix color at x %x|y %y|to %rgb=ledmatrixlegacy_colors"
         //% strip.defl=strip
         //% weight=4
-        //% parts="ledmatrixxy" advanced=true
+        //% parts="ledmatrixlegacy" advanced=true
         setMatrixColor(x: number, y: number, rgb: number) {
             if (this._matrixWidth <= 0) return; // not a matrix, ignore
             x = x >> 0;
@@ -232,11 +356,11 @@ namespace ledmatrixxy {
          * @param pixeloffset position of the LED in the strip
          * @param white brightness of the white LED
          */
-        //% blockId="ledmatrixxy_set_pixel_white" block="%strip|set pixel white LED at %pixeloffset|to %white"
+        //% blockId="ledmatrixlegacy_set_pixel_white" block="%strip|set pixel white LED at %pixeloffset|to %white"
         //% strip.defl=strip
         //% blockGap=8
         //% weight=80
-        //% parts="ledmatrixxy" advanced=true
+        //% parts="ledmatrixlegacy" advanced=true
         setPixelWhiteLED(pixeloffset: number, white: number): void {
             if (this._mode === LedMatrixXYMode.RGBW) {
                 this.setPixelW(pixeloffset >> 0, white >> 0);
@@ -246,10 +370,10 @@ namespace ledmatrixxy {
         /**
          * Send all the changes to the strip.
          */
-        //% blockId="ledmatrixxy_show" block="%strip|show" blockGap=8
+        //% blockId="ledmatrixlegacy_show" block="%strip|show" blockGap=8
         //% strip.defl=strip
         //% weight=79
-        //% parts="ledmatrixxy"
+        //% parts="ledmatrixlegacy"
         show() {
             // only supported in beta
             // ws2812b.setBufferMode(this.pin, this._mode);
@@ -260,10 +384,10 @@ namespace ledmatrixxy {
          * Turn off all LEDs.
          * You need to call ``show`` to make the changes visible.
          */
-        //% blockId="ledmatrixxy_clear" block="%strip|clear"
+        //% blockId="ledmatrixlegacy_clear" block="%strip|clear"
         //% strip.defl=strip
         //% weight=76
-        //% parts="ledmatrixxy"
+        //% parts="ledmatrixlegacy"
         clear(): void {
             const stride = this._mode === LedMatrixXYMode.RGBW ? 4 : 3;
             this.buf.fill(0, this.start * stride, this._length * stride);
@@ -272,7 +396,7 @@ namespace ledmatrixxy {
         /**
          * Gets the number of pixels declared on the strip
          */
-        //% blockId="ledmatrixxy_length" block="%strip|length" blockGap=8
+        //% blockId="ledmatrixlegacy_length" block="%strip|length" blockGap=8
         //% strip.defl=strip
         //% weight=60 advanced=true
         length() {
@@ -283,10 +407,10 @@ namespace ledmatrixxy {
          * Set the brightness of the strip. This flag only applies to future operation.
          * @param brightness a measure of LED brightness in 0-255. eg: 255
          */
-        //% blockId="ledmatrixxy_set_brightness" block="%strip|set brightness %brightness" blockGap=8
+        //% blockId="ledmatrixlegacy_set_brightness" block="%strip|set brightness %brightness" blockGap=8
         //% strip.defl=strip
         //% weight=59
-        //% parts="ledmatrixxy" advanced=true
+        //% parts="ledmatrixlegacy" advanced=true
         setBrightness(brightness: number): void {
             this.brightness = brightness & 0xff;
         }
@@ -294,10 +418,10 @@ namespace ledmatrixxy {
         /**
          * Apply brightness to current colors using a quadratic easing function.
          **/
-        //% blockId="ledmatrixxy_each_brightness" block="%strip|ease brightness" blockGap=8
+        //% blockId="ledmatrixlegacy_each_brightness" block="%strip|ease brightness" blockGap=8
         //% strip.defl=strip
         //% weight=58
-        //% parts="ledmatrixxy" advanced=true
+        //% parts="ledmatrixlegacy" advanced=true
         easeBrightness(): void {
             const stride = this._mode === LedMatrixXYMode.RGBW ? 4 : 3;
             const br = this.brightness;
@@ -325,9 +449,9 @@ namespace ledmatrixxy {
          * @param length number of LEDs in the range. eg: 4
          */
         //% weight=89
-        //% blockId="ledmatrixxy_range" block="%strip|range from %start|with %length|leds"
+        //% blockId="ledmatrixlegacy_range" block="%strip|range from %start|with %length|leds"
         //% strip.defl=strip
-        //% parts="ledmatrixxy"
+        //% parts="ledmatrixlegacy"
         //% blockSetVariable=range
         range(start: number, length: number): Strip {
             start = start >> 0;
@@ -348,10 +472,10 @@ namespace ledmatrixxy {
          * You need to call ``show`` to make the changes visible.
          * @param offset number of pixels to shift forward, eg: 1
          */
-        //% blockId="ledmatrixxy_shift" block="%strip|shift pixels by %offset" blockGap=8
+        //% blockId="ledmatrixlegacy_shift" block="%strip|shift pixels by %offset" blockGap=8
         //% strip.defl=strip
         //% weight=40
-        //% parts="ledmatrixxy"
+        //% parts="ledmatrixlegacy"
         shift(offset: number = 1): void {
             offset = offset >> 0;
             const stride = this._mode === LedMatrixXYMode.RGBW ? 4 : 3;
@@ -363,10 +487,10 @@ namespace ledmatrixxy {
          * You need to call ``show`` to make the changes visible.
          * @param offset number of pixels to rotate forward, eg: 1
          */
-        //% blockId="ledmatrixxy_rotate" block="%strip|rotate pixels by %offset" blockGap=8
+        //% blockId="ledmatrixlegacy_rotate" block="%strip|rotate pixels by %offset" blockGap=8
         //% strip.defl=strip
         //% weight=39
-        //% parts="ledmatrixxy"
+        //% parts="ledmatrixlegacy"
         rotate(offset: number = 1): void {
             offset = offset >> 0;
             const stride = this._mode === LedMatrixXYMode.RGBW ? 4 : 3;
@@ -374,10 +498,10 @@ namespace ledmatrixxy {
         }
 
         /**
-         * Set the pin where the ledmatrixxy is connected, defaults to P0.
+         * Set the pin where the ledmatrixlegacy is connected, defaults to P0.
          */
         //% weight=10
-        //% parts="ledmatrixxy" advanced=true
+        //% parts="ledmatrixlegacy" advanced=true
         setPin(pin: DigitalPin): void {
             this.pin = pin;
             pins.digitalWritePin(this.pin, 0);
@@ -387,7 +511,7 @@ namespace ledmatrixxy {
         /**
          * Estimates the electrical current (mA) consumed by the current light configuration.
          */
-        //% weight=9 blockId=ledmatrixxy_power block="%strip|power (mA)"
+        //% weight=9 blockId=ledmatrixlegacy_power block="%strip|power (mA)"
         //% strip.defl=strip
         //% advanced=true
         power(): number {
@@ -400,7 +524,7 @@ namespace ledmatrixxy {
                     p += this.buf[i + j];
                 }
             }
-            return Math.idiv(this.length() * 7, 10) /* 0.7mA per ledmatrixxy */
+            return Math.idiv(this.length() * 7, 10) /* 0.7mA per ledmatrixlegacy */
                 + Math.idiv(p * 480, 10000); /* rought approximation */
         }
 
@@ -488,12 +612,12 @@ namespace ledmatrixxy {
 
     /**
      * Create a new LedMatrixXY driver for `numleds` LEDs.
-     * @param pin the pin where the ledmatrixxy is connected.
+     * @param pin the pin where the ledmatrixlegacy is connected.
      * @param numleds number of leds in the strip, eg: 64
      */
-    //% blockId="ledmatrixxy_create" block="LedMatrixXY at pin %pin|with %numleds|leds as %mode"
+    //% blockId="ledmatrixlegacy_create" block="LedMatrixXY at pin %pin|with %numleds|leds as %mode"
     //% weight=90 blockGap=8
-    //% parts="ledmatrixxy"
+    //% parts="ledmatrixlegacy"
     //% trackArgs=0,2
     //% blockSetVariable=strip
     export function create(pin: DigitalPin, numleds: number = 64, mode: LedMatrixXYMode): Strip {
@@ -516,7 +640,7 @@ namespace ledmatrixxy {
      * @param blue value of the blue channel between 0 and 255. eg: 255
      */
     //% weight=1
-    //% blockId="ledmatrixxy_rgb" block="red %red|green %green|blue %blue"
+    //% blockId="ledmatrixlegacy_rgb" block="red %red|green %green|blue %blue"
     //% advanced=true
     export function rgb(red: number, green: number, blue: number): number {
         return packRGB(red, green, blue);
@@ -526,7 +650,7 @@ namespace ledmatrixxy {
      * Gets the RGB value of a known color
     */
     //% weight=2 blockGap=8
-    //% blockId="ledmatrixxy_colors" block="%color"
+    //% blockId="ledmatrixlegacy_colors" block="%color"
     //% advanced=true
     export function colors(color: LedMatrixXYColors): number {
         return color;
@@ -554,7 +678,7 @@ namespace ledmatrixxy {
      * @param s saturation from 0 to 99
      * @param l luminosity from 0 to 99
      */
-    //% blockId=ledmatrixxyHSL block="hue %h|saturation %s|luminosity %l"
+    //% blockId=ledmatrixlegacyHSL block="hue %h|saturation %s|luminosity %l"
     export function hsl(h: number, s: number, l: number): number {
         h = Math.round(h);
         s = Math.round(s);
