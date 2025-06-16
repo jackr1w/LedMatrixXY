@@ -73,21 +73,20 @@ namespace ledmatrixxy {
             }
             return mat
         }
-    
+
         /**
          * Set LED to a given color (0xRRGGBB).
          * You need to call ``show`` to make the changes visible.
-         * @param matrix LEDMatrix object
          * @param x Horizontal position of the LED in the matrix
          * @param y Vertical position of the LED in the matrix
          * @param rgb Color, e.g. 0xFF0000 for red
          */
-        // blockId="ledmatrixxy_set_pixel_color" block="%ledmatrix|set pixel at X %x|Y %y|to color %rgb=ledmatrixxy_colors"
-        // weight=80
-        // group="Configuration"
-        // parts="ledmatrixxy"
-        // trackArgs=0
-        // blockGap=8
+        //% blockId="ledmatrixxy_set_pixel_color" block="%ledmatrix|set pixel at X %x Y %y to color %rgb=ledmatrixxy_colors"
+        //% weight=80
+        //% group="Configuration"
+        //% parts="ledmatrixxy"
+        //% trackArgs=0
+        //% blockGap=8
         setPixel(x: number, y: number, rgb: number): void {
             if (x >= 0 && x < this.width && y >= 0 && y < this.height) {
                 this.matrix[y][x] = rgb
@@ -97,7 +96,6 @@ namespace ledmatrixxy {
         /** TODO - jackr1w - consider implementing a true reset procedure
          * Clear the LED matrix (set all pixels to black).
          * You need to call ``show`` to make the changes visible.
-         * @param matrix LEDMatrix object
          */
         //% blockId="ledmatrixxy_clear" block="%ledmatrix|clear"
         //% group="Configuration"
@@ -112,6 +110,24 @@ namespace ledmatrixxy {
             }
         }
 
+        /**
+         * Fill the whole matrix with a given color.
+         * You need to call ``show`` to make the changes visible.
+         * @param color Color to fill, e.g. 0x00FF00 for green
+         */
+        //% blockId="ledmatrixxy_fill" block="%ledmatrix|fill with color %color"
+        //% weight=78
+        //% group="Configuration"
+        //% parts="ledmatrixxy"
+        //% blockGap=8
+        fill(color: number): void {
+            for (let y = 0; y < this.height; y++) {
+                for (let x = 0; x < this.width; x++) {
+                    this.setPixel(x, y, color)
+                }
+            }
+        }
+        
         /**
          * Render the LED matrix (create the buffer and send it to display).
          * @param matrix LEDMatrix object
@@ -152,7 +168,7 @@ namespace ledmatrixxy {
      * @param length length of LED Matrix, eg: 8
      * @param snake Sype of LED Matrix connection: true if the rows of LEDs are routed like snake (from the end of the previous row)
      */
-    //% blockId="ledmatrixxy_create" block="LedMatrixXY at pin %pin|of width %width| and length %length|, snake-style %snake"
+    //% blockId="ledmatrixxy_create" block="LedMatrixXY at pin %pin|of width %width and length %length| snake-style %snake"
     //% weight=90
     //% group="Configuration"
     //% parts="ledmatrixxy"
@@ -169,22 +185,16 @@ namespace ledmatrixxy {
     }
 
     /**
-     * Fill the whole matrix with a given color.
-     * @param matrix LEDMatrix object
-     * @param color Color to fill, e.g. 0x00FF00 for green
-     */
-    //% blockId="ledmatrixxy_fill" block="%ledmatrix|fill with color %color"
-    //% weight=78
+     * Gets the RGB value of a known color
+    */
+    //% weight=2
+    //% blockId="ledmatrixxy_colors" block="%color"
     //% group="Configuration"
-    //% parts="ledmatrixxy"
     //% blockGap=8
-    export function fill(matrix: LEDMatrix, color: number): void {
-        for (let y = 0; y < matrix.height; y++) {
-            for (let x = 0; x < matrix.width; x++) {
-                matrix.setPixel(x, y, color)
-            }
-        }
+    export function colors(color: LedMatrixXYColors): number {
+        return color;
     }
+
 }
 
 
