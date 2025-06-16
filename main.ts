@@ -39,7 +39,7 @@ enum LedMatrixXYMode {
 /**
  * Functions to operate LED Matrixes - rewritten from scratch.
  */
-//% weight=5 color=#FF7000 icon="\uf10a"
+//% weight=5 color=#FF7000 icon="\uf03e"
 namespace ledmatrixxy {
     /**
      * A LED Matrix
