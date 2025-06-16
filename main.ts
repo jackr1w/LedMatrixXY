@@ -80,8 +80,7 @@ namespace ledmatrixxy {
          * @param y Vertical position of the LED in the matrix
          * @param rgb RGB color of the LED, e.g. 0xFFAA55
          */
-        //% blockId="ledmatrixxy_set_pixel_color" block="%ledmatrix|set pixel color at X=%x|Y=%y|to %rgb=ledmatrixxy_colors"
-        //% blockGap=8
+        //% blockId="ledmatrixxy_set_pixel_color" block="%ledmatrix|set pixel at X %x|Y %y|to color %rgb=ledmatrixxy_colors"
         //% weight=80
         //% parts="ledmatrixxy"
         setPixel(x: number, y: number, rgb: number): void {
