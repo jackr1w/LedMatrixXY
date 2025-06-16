@@ -76,14 +76,14 @@ namespace ledmatrixxy {
         /**
          * Set LED to a given color (range 0-255 for r, g, b).
          * You need to call ``show`` to make the changes visible.
-         * @param pixeloffset position of the LedMatrixXY in the strip
-         * @param rgb RGB color of the LED
+         * @param x Horizontal position of the LED in the matrix
+         * @param y Vertical position of the LED in the matrix
+         * @param rgb RGB color of the LED, e.g. 0xFFAA55
          */
-        //% blockId="ledmatrixxy_set_pixel_color" block="%strip|set pixel color at %pixeloffset|to %rgb=ledmatrixxy_colors"
-        //% strip.defl=strip
+        //% blockId="ledmatrixxy_set_pixel_color" block="%ledmatrix|set pixel color at X=%x|Y=%y|to %rgb=ledmatrixxy_colors"
         //% blockGap=8
         //% weight=80
-        //% parts="ledmatrixxy" advanced=true
+        //% parts="ledmatrixxy"
         setPixel(x: number, y: number, rgb: number): void {
             if (x >= 0 && x < this.width && y >= 0 && y < this.height) {
                 this.matrix[y][x] = rgb
@@ -94,8 +94,7 @@ namespace ledmatrixxy {
          * Turn off all LEDs.
          * You need to call ``show`` to make the changes visible.
          */
-        //% blockId="ledmatrixxy_clear" block="%strip|clear"
-        //% strip.defl=strip
+        //% blockId="ledmatrixxy_clear" block="%ledmatrix|clear"
         //% weight=76
         //% parts="ledmatrixxy"
         clear(): void {
@@ -110,10 +109,9 @@ namespace ledmatrixxy {
         /**
          * Create the buffer and send it to the LED Matrix.
          */
-        //% blockId="ledmatrixlegacy_show" block="%strip|show" blockGap=8
-        //% strip.defl=strip
+        //% blockId="ledmatrixlegacy_show" block="%ledmatrix|show" blockGap=8
         //% weight=79
-        //% parts="ledmatrixlegacy"
+        //% parts="ledmatrixxy"
         show(): void {
             let i = 0
             for (let y = 0; y < this.height; y++) {
@@ -144,7 +142,7 @@ namespace ledmatrixxy {
     //% weight=90 blockGap=8
     //% parts="ledmatrixxy"
     //% trackArgs=0,2
-    //% blockSetVariable=strip
+    //% blockSetVariable=ledmatrix
     export function create(pin: DigitalPin, width: number = 8, length: number = 8, snake: boolean = true): LEDMatrix {
         //let stride = mode === LedMatrixXYMode.RGBW ? 4 : 3;
         let stride = 3; // TODO - jackr1w - implement LED operation modes
