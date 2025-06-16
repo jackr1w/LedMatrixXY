@@ -113,18 +113,18 @@ namespace ledmatrixxy {
         /**
          * Fill the whole matrix with a given color.
          * You need to call ``show`` to make the changes visible.
-         * @param color Color to fill, e.g. 0x00FF00 for green
+         * @param rgb Color to fill, e.g. 0x00FF00 for green
          */
-        //% blockId="ledmatrixxy_fill" block="%ledmatrix|fill with color %color=ledmatrixxy_colors"
+        //% blockId="ledmatrixxy_fill" block="%ledmatrix|fill with color %rgb=ledmatrixxy_colors"
         //% weight=78
         //% group="Configuration"
         //% parts="ledmatrixxy"
         //% trackArgs=0
         //% blockGap=8
-        fill(color: number): void {
+        fill(rgb: number): void {
             for (let y = 0; y < this.height; y++) {
                 for (let x = 0; x < this.width; x++) {
-                    this.setPixel(x, y, color)
+                    this.setPixel(x, y, rgb)
                 }
             }
         }
