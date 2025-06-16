@@ -45,7 +45,7 @@ namespace ledmatrixxy {
      * A LED Matrix
      */
     export class LEDMatrix {
-        pin: DigitalPin;
+        pin: DigitalPin
         private width: number
         private height: number
         private snake: boolean
@@ -131,6 +131,32 @@ namespace ledmatrixxy {
             ws2812b.sendBuffer(this.buffer, this.pin);
         }
     }
+
+    /**
+     * Create a new LedMatrixXY driver for LED Matrix width*length.
+     * @param pin the pin where the LED Matrix is connected.
+     * @param width width of LED Matrix, eg: 8
+     * @param length length of LED Matrix, eg: 8
+     * @param snake Sype of LED Matrix connection - whether the rows of LEDs are routed like snake (from the end of the previous row) or not
+     */
+    //% blockId="ledmatrixxy_create" block="LedMatrixXY at pin %pin|of width %width| and length %length|, snake-style %snake"
+    //% weight=90 blockGap=8
+    //% parts="ledmatrixxy"
+    //% trackArgs=0,2
+    //% blockSetVariable=strip
+    export function create(pin: DigitalPin, width: number = 8, length: number = 8, snake: boolean = true): LEDMatrix {
+        let matrix = new LEDMatrix();
+        let stride = mode === LedMatrixXYMode.RGBW ? 4 : 3;
+        matrix.width = width
+        matrix.height = height
+        matrix.snake = snake
+        matrix.buffer = pins.createBuffer(width * height * stride)  // 3/4 bytes per RGB LED
+        //strip.setBrightness(128)
+        matrix.pin = pin
+        return strip;
+    }
+
+
 }
 
 
