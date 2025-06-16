@@ -201,7 +201,7 @@ namespace ledmatrixxy {
      * TODO - jackr1w - enhance to allow R,G,B separate inputs
     */
     //% weight=2
-    //% blockId="ledmatrixxy_customcolor" block="%color"
+    //% blockId="ledmatrixxy_customcolor" block="RGB value %color"
     //% group="Variables"
     //% blockGap=8
     export function customcolor(color: number): number {
