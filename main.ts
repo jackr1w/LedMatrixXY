@@ -139,7 +139,7 @@ namespace ledmatrixxy {
      * @param pin the pin where the LED Matrix is connected.
      * @param width width of LED Matrix, eg: 8
      * @param length length of LED Matrix, eg: 8
-     * @param snake Sype of LED Matrix connection - whether the rows of LEDs are routed like snake (from the end of the previous row) or not
+     * @param snake Sype of LED Matrix connection: true if the rows of LEDs are routed like snake (from the end of the previous row)
      */
     //% blockId="ledmatrixxy_create" block="LedMatrixXY at pin %pin|of width %width| and length %length|, snake-style %snake"
     //% weight=90 blockGap=8
