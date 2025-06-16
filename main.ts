@@ -44,6 +44,7 @@ namespace ledmatrixxy {
     /**
      * A LED Matrix
      */
+    //% blockHidden=true
     export class LEDMatrix {
         pin: DigitalPin
         width: number
