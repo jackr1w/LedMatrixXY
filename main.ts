@@ -357,13 +357,11 @@ namespace ledmatrixxy {
         //% trackArgs=0
         //% blockGap=8
         printChar(ch: string, rgb: number = 0xffffff): void {
-            if (!ch || ch.length === 0) return;
+            if (!ch || ch.length === 0 | ch.length > 1) return;
             const cols = LEDMatrix.font[ch.toUpperCase()] || LEDMatrix.font[" "];
             const charWidth = cols.length;
             const offsetX = Math.max(0, Math.floor((this.width - charWidth) / 2));
             const offsetY = Math.max(0, Math.floor((this.height - 7) / 2));
-
-            this.clear();
             for (let x = 0; x < cols.length && (x + offsetX) < this.width; x++) {
                 for (let y = 0; y < 7 && (y + offsetY) < this.height; y++) {
                     const bit = (cols[x] >> y) & 0x01;
@@ -372,50 +370,6 @@ namespace ledmatrixxy {
             }
         }
         
-        /**
-         * Print a scrolling line of text
-         * @param text string to scroll
-         */
-        //% block="%ledmatrix|print line %text"
-        //% weight=59
-        //% group="Configuration"
-        //% parts="ledmatrixxy"
-        //% trackArgs=0
-        //% blockGap=8
-        printLine(text: string, speed: number = 120, rgb: number = 0xffffff): void {
-            const gap = 1;
-            const buffer: number[] = [];
-
-            for (let i = 0; i < text.length; i++) {
-                const ch = text.charAt(i).toUpperCase();
-                const cols = LEDMatrix.font[ch] || LEDMatrix.font[" "];
-                for (let col of cols) {
-                    buffer.push(col);
-                }
-                for (let g = 0; g < gap; g++) {
-                    buffer.push(0x00);
-                }
-            }
-
-            const totalCols = buffer.length;
-            const visibleCols = this.width;
-
-            for (let offset = 0; offset <= totalCols - visibleCols; offset++) {
-                this.clear();
-                for (let x = 0; x < visibleCols; x++) {
-                    if (offset + x < totalCols) {
-                        const colByte = buffer[offset + x];
-                        for (let y = 0; y < 7 && y < this.height; y++) {
-                            const bit = (colByte >> y) & 0x01;
-                            this.matrix[y][x] = bit ? rgb : 0x000000;
-                        }
-                    }
-                }
-                this.show();
-                basic.pause(speed);
-            }
-        }
-
         /**
          * Render the LED matrix (create the buffer and send it to display).
          * @param matrix LEDMatrix object
@@ -454,6 +408,51 @@ namespace ledmatrixxy {
             }
             ws2812b.sendBuffer(this.buffer, this.pin);
         }
+
+        /**
+         * Print a scrolling line of text
+         * @param text string to scroll
+         */
+        //% block="%ledmatrix|print line %text"
+        //% weight=59
+        //% group="Output"
+        //% parts="ledmatrixxy"
+        //% trackArgs=0
+        //% blockGap=8
+        printLine(text: string, speed: number = 120, rgb: number = 0xffffff): void {
+            const gap = 1;
+            const buffer: number[] = [];
+
+            for (let i = 0; i < text.length; i++) {
+                const ch = text.charAt(i).toUpperCase();
+                const cols = LEDMatrix.font[ch] || LEDMatrix.font[" "];
+                for (let col of cols) {
+                    buffer.push(col);
+                }
+                for (let g = 0; g < gap; g++) {
+                    buffer.push(0x00);
+                }
+            }
+
+            const totalCols = buffer.length;
+            const visibleCols = this.width;
+
+            for (let offset = 0; offset <= totalCols - visibleCols; offset++) {
+                this.clear();
+                for (let x = 0; x < visibleCols; x++) {
+                    if (offset + x < totalCols) {
+                        const colByte = buffer[offset + x];
+                        for (let y = 0; y < 7 && y < this.height; y++) {
+                            const bit = (colByte >> y) & 0x01;
+                            this.matrix[y][x] = bit ? rgb : 0x000000;
+                        }
+                    }
+                }
+                this.show();
+                basic.pause(speed);
+            }
+        }
+
     }
 
     // -----------------------------------------------------------------------------------------------------
