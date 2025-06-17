@@ -138,6 +138,10 @@ namespace ledmatrixxy {
         //% block="%ledmatrix|shift X by %amount|circular %circular"
         //% amount.defl=1
         //% weight=65
+        //% group="Configuration"
+        //% parts="ledmatrixxy"
+        //% trackArgs=0
+        //% blockGap=8
         shiftX(amount: number, circular: boolean): void {
             amount = amount % this.width;
             if (amount == 0) return;
@@ -168,6 +172,10 @@ namespace ledmatrixxy {
         //% block="%ledmatrix|shift Y by %amount|circular %circular"
         //% amount.defl=1
         //% weight=64
+        //% group="Configuration"
+        //% parts="ledmatrixxy"
+        //% trackArgs=0
+        //% blockGap=8
         shiftY(amount: number, circular: boolean): void {
             amount = amount % this.height;
             if (amount == 0) return;
