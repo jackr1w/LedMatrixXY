@@ -8,7 +8,7 @@ namespace ledmatrixxy {
     /**
      * Well known colors for a LED (referenced from Neopixel with minor adjustments for WS2812 LED strengths)
      */
-    enum LedMatrixXYColors {
+    export enum LedMatrixXYColors {
         //% block=red
         Red = 0xFF0000,
         //% block=orange
@@ -34,7 +34,7 @@ namespace ledmatrixxy {
     /**
      * Different control modes to support RGB or RGB+W LED Matrixes
      */
-    enum LEDControlMode {
+    export enum LEDControlMode {
         //% block="24-bit G->R->B default"
         GRB = 1,
         //% block="32-bit G->R->B->W for white channel LEDs"
@@ -46,7 +46,7 @@ namespace ledmatrixxy {
     /**
      * Rotation options for the LED matrix
      */
-    enum RotationDirection {
+    export enum RotationDirection {
         //% block="90°"
         Rotate90 = 90,
         //% block="180°"
