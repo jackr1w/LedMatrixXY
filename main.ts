@@ -131,6 +131,70 @@ namespace ledmatrixxy {
         }
         
         /**
+         * Shift matrix content in X direction
+         * @param amount number of pixels to shift; negative = left, positive = right
+         * @param circular whether to wrap pixels around
+         */
+        //% block="%ledmatrix|shift X by %amount|circular %circular"
+        //% amount.defl=1
+        //% weight=65
+        shiftX(amount: number, circular: boolean): void {
+            amount = amount % this.width;
+            if (amount == 0) return;
+            let newMatrix: number[][] = this.createMatrix(this.width, this.height);
+            for (let y = 0; y < this.height; y++) {
+                for (let x = 0; x < this.width; x++) {
+                    let newX = x - amount;
+                    if (circular) {
+                        newX = (newX + this.width) % this.width;
+                        newMatrix[y][x] = this.matrix[y][newX];
+                    } else {
+                        if (newX >= 0 && newX < this.width) {
+                            newMatrix[y][x] = this.matrix[y][newX];
+                        } else {
+                            newMatrix[y][x] = 0;
+                        }
+                    }
+                }
+            }
+            this.matrix = newMatrix;
+        }
+
+        /**
+         * Shift matrix content in Y direction
+         * @param amount number of pixels to shift; negative = up, positive = down
+         * @param circular whether to wrap pixels around
+         */
+        //% block="%ledmatrix|shift Y by %amount|circular %circular"
+        //% amount.defl=1
+        //% weight=64
+        shiftY(amount: number, circular: boolean): void {
+            amount = amount % this.height;
+            if (amount == 0) return;
+            let newMatrix: number[][] = this.createMatrix(this.width, this.height);
+            for (let y = 0; y < this.height; y++) {
+                let newY = y - amount;
+                if (circular) {
+                    newY = (newY + this.height) % this.height;
+                    for (let x = 0; x < this.width; x++) {
+                        newMatrix[y][x] = this.matrix[newY][x];
+                    }
+                } else {
+                    if (newY >= 0 && newY < this.height) {
+                        for (let x = 0; x < this.width; x++) {
+                            newMatrix[y][x] = this.matrix[newY][x];
+                        }
+                    } else {
+                        for (let x = 0; x < this.width; x++) {
+                            newMatrix[y][x] = 0;
+                        }
+                    }
+                }
+            }
+            this.matrix = newMatrix;
+        }
+
+        /**
          * Render the LED matrix (create the buffer and send it to display).
          * @param matrix LEDMatrix object
          */
