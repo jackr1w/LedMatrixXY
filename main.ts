@@ -357,7 +357,7 @@ namespace ledmatrixxy {
         //% trackArgs=0
         //% blockGap=8
         printChar(ch: string, rgb: number = 0xffffff): void {
-            if (!ch || ch.length === 0 | ch.length > 1) return;
+            if (!ch || ch.length === 0 || ch.length > 1) return;
             const cols = LEDMatrix.font[ch.toUpperCase()] || LEDMatrix.font[" "];
             const charWidth = cols.length;
             const offsetX = Math.max(0, Math.floor((this.width - charWidth) / 2));
