@@ -247,7 +247,7 @@ namespace ledmatrixxy {
     //% group="Variables"
     //% blockGap=8
     export function packRGBW(R: number, G: number, B: number, W: number): number {
-        return ((W & 0xFF) << 24) | (R & 0xFF) << 16) | ((G & 0xFF) << 8) | (B & 0xFF);
+        return ((W & 0xFF) << 24) | ((R & 0xFF) << 16) | ((G & 0xFF) << 8) | (B & 0xFF);
     }
 
     /**
