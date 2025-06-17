@@ -163,12 +163,12 @@ namespace ledmatrixxy {
                         this.buffer.setUint8(i++, g)
                         this.buffer.setUint8(i++, r)
                         this.buffer.setUint8(i++, b)
-                    else if (this.mode === LEDControlMode.GRBW) {
+                    } else if (this.mode === LEDControlMode.GRBW) {
                         this.buffer.setUint8(i++, g)
                         this.buffer.setUint8(i++, r)
                         this.buffer.setUint8(i++, b)
                         this.buffer.setUint8(i++, w)
-                    else if (this.mode === LEDControlMode.RGB) {
+                    } else if (this.mode === LEDControlMode.RGB) {
                         this.buffer.setUint8(i++, r)
                         this.buffer.setUint8(i++, g)
                         this.buffer.setUint8(i++, b)
