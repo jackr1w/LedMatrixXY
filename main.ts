@@ -1,47 +1,60 @@
 /**
- * Well known colors for a LED (referenced from Neopixel with minor adjustments for WS2812 LED strengths)
- */
-enum LedMatrixXYColors {
-    //% block=red
-    Red = 0xFF0000,
-    //% block=orange
-    Orange = 0xFF6000,
-    //% block=yellow
-    Yellow = 0xFFFF00,
-    //% block=green
-    Green = 0x00FF00,
-    //% block=blue
-    Blue = 0x0000FF,
-    //% block=indigo
-    Indigo = 0x4b0082,
-    //% block=violet
-    Violet = 0x8a2be2,
-    //% block=purple
-    Purple = 0xFF00FF,
-    //% block=white
-    White = 0xFFFFFF,
-    //% block=black
-    Black = 0x000000
-}
-
-/**
- * Different control modes to support RGB or RGB+W LED Matrixes
- */
-enum LEDControlMode {
-    //% block="24-bit G->R->B default"
-    GRB = 1,
-    //% block="32-bit G->R->B->W for white channel LEDs"
-    GRBW = 2,
-    //% block="24-bit R->G->B"
-    RGB = 3
-}
-
-/**
  * Functions to operate LED Matrixes - rewritten from scratch.
  */
 //% weight=5 color=#FF7000 icon="\uf03e" blockGap=8
 //% groups='["Configuration", "Output", "Variables"]'
 namespace ledmatrixxy {
+    
+    /**
+     * Well known colors for a LED (referenced from Neopixel with minor adjustments for WS2812 LED strengths)
+     */
+    enum LedMatrixXYColors {
+        //% block=red
+        Red = 0xFF0000,
+        //% block=orange
+        Orange = 0xFF6000,
+        //% block=yellow
+        Yellow = 0xFFFF00,
+        //% block=green
+        Green = 0x00FF00,
+        //% block=blue
+        Blue = 0x0000FF,
+        //% block=indigo
+        Indigo = 0x4b0082,
+        //% block=violet
+        Violet = 0x8a2be2,
+        //% block=purple
+        Purple = 0xFF00FF,
+        //% block=white
+        White = 0xFFFFFF,
+        //% block=black
+        Black = 0x000000
+    }
+    
+    /**
+     * Different control modes to support RGB or RGB+W LED Matrixes
+     */
+    enum LEDControlMode {
+        //% block="24-bit G->R->B default"
+        GRB = 1,
+        //% block="32-bit G->R->B->W for white channel LEDs"
+        GRBW = 2,
+        //% block="24-bit R->G->B"
+        RGB = 3
+    }
+    
+    /**
+     * Rotation options for the LED matrix
+     */
+    enum RotationDirection {
+        //% block="90°"
+        Rotate90 = 90,
+        //% block="180°"
+        Rotate180 = 180,
+        //% block="270°"
+        Rotate270 = 270
+    }
+    
     /**
      * A LED Matrix
      */
@@ -202,6 +215,87 @@ namespace ledmatrixxy {
             this.matrix = newMatrix;
         }
 
+        /**
+         * Rotate the matrix by 90, 180, or 270 degrees clockwise.
+         * This is a lossy rotation if width ≠ height.
+         * @param direction rotation angle enum
+         */
+        //% block="%ledmatrix|rotate %direction"
+        //% weight=63
+        //% group="Configuration"
+        //% parts="ledmatrixxy"
+        //% trackArgs=0
+        //% blockGap=8
+        rotate(direction: RotationDirection): void {
+            const w = this.width;
+            const h = this.height;
+            const temp: number[][] = this.createMatrix(w, h);
+        
+            if (direction == RotationDirection.Rotate90) {
+                for (let y = 0; y < h; y++) {
+                    for (let x = 0; x < w; x++) {
+                        const srcX = y;
+                        const srcY = w - 1 - x;
+                        if (srcX < h && srcY < w)
+                            temp[y][x] = this.matrix[srcX][srcY];
+                        else
+                            temp[y][x] = 0;
+                    }
+                }
+            } else if (direction == RotationDirection.Rotate180) {
+                for (let y = 0; y < h; y++) {
+                    for (let x = 0; x < w; x++) {
+                        const srcX = w - 1 - x;
+                        const srcY = h - 1 - y;
+                        temp[y][x] = this.matrix[srcY][srcX];
+                    }
+                }
+            } else if (direction == RotationDirection.Rotate270) {
+                for (let y = 0; y < h; y++) {
+                    for (let x = 0; x < w; x++) {
+                        const srcX = h - 1 - y;
+                        const srcY = x;
+                        if (srcX < h && srcY < w)
+                            temp[y][x] = this.matrix[srcX][srcY];
+                        else
+                            temp[y][x] = 0;
+                    }
+                }
+            } else {
+                return; // Invalid angle
+            }
+        
+            this.matrix = temp;
+        }
+
+        /**
+         * Flip the matrix horizontally (mirror over vertical axis)
+         */
+        //% block="%ledmatrix|flip horizontally"
+        //% weight=62
+        //% group="Configuration"
+        //% parts="ledmatrixxy"
+        //% trackArgs=0
+        //% blockGap=8
+        flipX(): void {
+            for (let y = 0; y < this.height; y++) {
+                this.matrix[y].reverse();
+            }
+        }
+
+        /**
+         * Flip the matrix vertically (mirror over horizontal axis)
+         */
+        //% block="%ledmatrix|flip vertically"
+        //% weight=61
+        //% group="Configuration"
+        //% parts="ledmatrixxy"
+        //% trackArgs=0
+        //% blockGap=8
+        flipY(): void {
+            this.matrix.reverse();
+        }
+        
         /**
          * Render the LED matrix (create the buffer and send it to display).
          * @param matrix LEDMatrix object
