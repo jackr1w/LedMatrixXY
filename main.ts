@@ -63,64 +63,84 @@ namespace ledmatrixxy {
         width: number
         height: number
         private snake: boolean
+        private row0_at_bottom: boolean
         private matrix: number[][]
         private buffer: Buffer
         private mode: LEDControlMode
 
+        // NEW: Replaced with a 5x6 font for better spacing on 8-pixel high displays.
         private static font: { [char: string]: number[] } = {
-            "A": [0x1E, 0x05, 0x05, 0x1E],
-            "B": [0x1F, 0x15, 0x15, 0x0A],
-            "C": [0x0E, 0x11, 0x11, 0x0A],
-            "D": [0x1F, 0x11, 0x11, 0x0E],
-            "E": [0x1F, 0x15, 0x15, 0x11],
-            "F": [0x1F, 0x05, 0x05, 0x01],
-            "G": [0x0E, 0x11, 0x15, 0x1D],
-            "H": [0x1F, 0x04, 0x04, 0x1F],
-            "I": [0x11, 0x1F, 0x11],
-            "J": [0x08, 0x10, 0x10, 0x0F],
-            "K": [0x1F, 0x04, 0x0A, 0x11],
-            "L": [0x1F, 0x10, 0x10, 0x10],
-            "M": [0x1F, 0x02, 0x04, 0x02, 0x1F],
-            "N": [0x1F, 0x02, 0x04, 0x1F],
-            "O": [0x0E, 0x11, 0x11, 0x0E],
-            "P": [0x1F, 0x05, 0x05, 0x02],
-            "Q": [0x0E, 0x11, 0x19, 0x1E],
-            "R": [0x1F, 0x05, 0x0D, 0x12],
-            "S": [0x12, 0x15, 0x15, 0x09],
-            "T": [0x01, 0x1F, 0x01],
-            "U": [0x0F, 0x10, 0x10, 0x0F],
-            "V": [0x07, 0x08, 0x10, 0x08, 0x07],
-            "W": [0x1F, 0x08, 0x04, 0x08, 0x1F],
-            "X": [0x11, 0x0A, 0x04, 0x0A, 0x11],
-            "Y": [0x01, 0x02, 0x1C, 0x02, 0x01],
-            "Z": [0x19, 0x15, 0x13, 0x11],
-            "0": [0x0E, 0x11, 0x11, 0x0E],
-            "1": [0x12, 0x1F, 0x10],
-            "2": [0x12, 0x19, 0x15, 0x12],
-            "3": [0x11, 0x15, 0x15, 0x0A],
-            "4": [0x07, 0x04, 0x04, 0x1F],
-            "5": [0x17, 0x15, 0x15, 0x09],
-            "6": [0x0E, 0x15, 0x15, 0x08],
-            "7": [0x01, 0x01, 0x1D, 0x03],
-            "8": [0x0A, 0x15, 0x15, 0x0A],
-            "9": [0x02, 0x15, 0x15, 0x0E],
-            ".": [0x10],
-            ",": [0x10, 0x08],
-            "!": [0x17],
-            "?": [0x02, 0x01, 0x15, 0x02],
-            "-": [0x04, 0x04, 0x04],
-            ":": [0x0A],
-            "'": [0x03],
-            "\"": [0x03, 0x03],
-            "(": [0x0E, 0x11],
-            ")": [0x11, 0x0E],
-            " ": [0x00, 0x00, 0x00, 0x00]
+            ' ': [0x00, 0x00, 0x00, 0x00, 0x00],
+            '!': [0x00, 0x2f, 0x00, 0x00, 0x00],
+            '"': [0x00, 0x03, 0x00, 0x03, 0x00],
+            '#': [0x14, 0x3f, 0x14, 0x3f, 0x14],
+            '$': [0x14, 0x2a, 0x3f, 0x2a, 0x11],
+            '%': [0x22, 0x11, 0x08, 0x04, 0x23],
+            '&': [0x1a, 0x25, 0x25, 0x1a, 0x04],
+            '\'': [0x00, 0x01, 0x02, 0x00, 0x00],
+            '(': [0x00, 0x1c, 0x22, 0x00, 0x00],
+            ')': [0x00, 0x22, 0x1c, 0x00, 0x00],
+            '*': [0x08, 0x05, 0x1f, 0x05, 0x08],
+            '+': [0x08, 0x08, 0x1f, 0x08, 0x08],
+            ',': [0x00, 0x30, 0x10, 0x00, 0x00],
+            '-': [0x08, 0x08, 0x08, 0x08, 0x08],
+            '.': [0x00, 0x30, 0x30, 0x00, 0x00],
+            '/': [0x20, 0x10, 0x08, 0x04, 0x02],
+            '0': [0x1e, 0x21, 0x21, 0x1e, 0x00],
+            '1': [0x00, 0x21, 0x3f, 0x20, 0x00],
+            '2': [0x22, 0x21, 0x21, 0x26, 0x00],
+            '3': [0x12, 0x21, 0x21, 0x1a, 0x00],
+            '4': [0x0c, 0x0a, 0x09, 0x3f, 0x08],
+            '5': [0x3a, 0x25, 0x25, 0x11, 0x00],
+            '6': [0x1e, 0x25, 0x25, 0x18, 0x00],
+            '7': [0x01, 0x01, 0x21, 0x2f, 0x00],
+            '8': [0x1a, 0x25, 0x25, 0x1a, 0x00],
+            '9': [0x0c, 0x12, 0x12, 0x3e, 0x00],
+            ':': [0x00, 0x2a, 0x2a, 0x00, 0x00],
+            ';': [0x00, 0x2a, 0x1a, 0x00, 0x00],
+            '<': [0x08, 0x14, 0x22, 0x00, 0x00],
+            '=': [0x14, 0x14, 0x14, 0x14, 0x14],
+            '>': [0x00, 0x22, 0x14, 0x08, 0x00],
+            '?': [0x02, 0x01, 0x21, 0x0d, 0x00],
+            '@': [0x1e, 0x21, 0x2d, 0x2d, 0x1e],
+            'A': [0x3e, 0x05, 0x05, 0x3e, 0x00],
+            'B': [0x3f, 0x25, 0x25, 0x1a, 0x00],
+            'C': [0x1e, 0x21, 0x21, 0x12, 0x00],
+            'D': [0x3f, 0x21, 0x21, 0x1e, 0x00],
+            'E': [0x3f, 0x25, 0x25, 0x21, 0x00],
+            'F': [0x3f, 0x05, 0x05, 0x01, 0x00],
+            'G': [0x1e, 0x21, 0x25, 0x1d, 0x00],
+            'H': [0x3f, 0x04, 0x04, 0x3f, 0x00],
+            'I': [0x21, 0x3f, 0x21, 0x00, 0x00],
+            'J': [0x10, 0x20, 0x21, 0x1f, 0x00],
+            'K': [0x3f, 0x04, 0x0a, 0x29, 0x00],
+            'L': [0x3f, 0x20, 0x20, 0x20, 0x00],
+            'M': [0x3f, 0x02, 0x0c, 0x02, 0x3f],
+            'N': [0x3f, 0x02, 0x04, 0x08, 0x3f],
+            'O': [0x1e, 0x21, 0x21, 0x1e, 0x00],
+            'P': [0x3f, 0x05, 0x05, 0x02, 0x00],
+            'Q': [0x1e, 0x21, 0x29, 0x3e, 0x20],
+            'R': [0x3f, 0x05, 0x0d, 0x2a, 0x00],
+            'S': [0x12, 0x25, 0x25, 0x19, 0x00],
+            'T': [0x01, 0x01, 0x3f, 0x01, 0x01],
+            'U': [0x1f, 0x20, 0x20, 0x1f, 0x00],
+            'V': [0x0f, 0x10, 0x20, 0x10, 0x0f],
+            'W': [0x1f, 0x20, 0x18, 0x20, 0x1f],
+            'X': [0x29, 0x1a, 0x04, 0x1a, 0x29],
+            'Y': [0x03, 0x04, 0x38, 0x04, 0x03],
+            'Z': [0x22, 0x26, 0x2a, 0x32, 0x00],
+            '[': [0x00, 0x3f, 0x21, 0x21, 0x00],
+            '\\': [0x02, 0x04, 0x08, 0x10, 0x20],
+            ']': [0x00, 0x21, 0x21, 0x3f, 0x00],
+            '^': [0x04, 0x02, 0x01, 0x02, 0x04],
+            '_': [0x20, 0x20, 0x20, 0x20, 0x20]
         };
 
-        constructor(width: number, height: number, snake: boolean = true, mode: LEDControlMode) {
+        constructor(width: number, height: number, snake: boolean = true, row0_at_bottom: boolean, mode: LEDControlMode) {
             this.width = width
             this.height = height
             this.snake = snake
+            this.row0_at_bottom = row0_at_bottom
             this.mode = mode
             let stride = mode === LEDControlMode.GRBW ? 4 : 3;
             this.matrix = this.createMatrix(width, height)
@@ -267,7 +287,7 @@ namespace ledmatrixxy {
 
         /**
          * Rotate the matrix by 90, 180, or 270 degrees clockwise.
-         * This is a lossy rotation if width ≠ height.
+         * For non-square matrices, this is a lossy rotation, as pixels outside the original dimensions are discarded.
          * @param direction rotation angle enum
          */
         //% block="%ledmatrix|rotate %direction"
@@ -279,42 +299,51 @@ namespace ledmatrixxy {
         rotate(direction: RotationDirection): void {
             const w = this.width;
             const h = this.height;
-            const temp: number[][] = this.createMatrix(w, h);
-        
-            if (direction == RotationDirection.Rotate90) {
-                for (let y = 0; y < h; y++) {
+            // Create a temporary matrix with the same dimensions
+            let temp = this.createMatrix(w, h);
+            
+            // Calculate center for rotation
+            const cx = (w - 1) / 2;
+            const cy = (h - 1) / 2;
+
+            if (direction == RotationDirection.Rotate180) {
+                 for (let y = 0; y < h; y++) {
                     for (let x = 0; x < w; x++) {
-                        const srcX = y;
-                        const srcY = w - 1 - x;
-                        if (srcX < h && srcY < w)
-                            temp[y][x] = this.matrix[srcX][srcY];
-                        else
-                            temp[y][x] = 0;
-                    }
-                }
-            } else if (direction == RotationDirection.Rotate180) {
-                for (let y = 0; y < h; y++) {
-                    for (let x = 0; x < w; x++) {
-                        const srcX = w - 1 - x;
-                        const srcY = h - 1 - y;
-                        temp[y][x] = this.matrix[srcY][srcX];
-                    }
-                }
-            } else if (direction == RotationDirection.Rotate270) {
-                for (let y = 0; y < h; y++) {
-                    for (let x = 0; x < w; x++) {
-                        const srcX = h - 1 - y;
-                        const srcY = x;
-                        if (srcX < h && srcY < w)
-                            temp[y][x] = this.matrix[srcX][srcY];
-                        else
-                            temp[y][x] = 0;
+                        temp[h - 1 - y][w - 1 - x] = this.matrix[y][x];
                     }
                 }
             } else {
-                return; // Invalid angle
+                // For 90 and 270 degrees
+                for (let y_new = 0; y_new < h; y_new++) {
+                    for (let x_new = 0; x_new < w; x_new++) {
+                        // Translate point to be relative to center
+                        const x_rel = x_new - cx;
+                        const y_rel = y_new - cy;
+
+                        let x_rot = 0;
+                        let y_rot = 0;
+
+                        // Apply inverse rotation to find source pixel
+                        if (direction == RotationDirection.Rotate90) { // To get a 90 deg rotation, apply a -90 (270) rotation to find source
+                             x_rot = x_rel * 0 - y_rel * 1; // cos(270)=0, sin(270)=-1
+                             y_rot = x_rel * 1 + y_rel * 0; // sin(270)=-1, cos(270)=0  -- Wait, standard rotation matrix is [cos, -sin], [sin, cos]. so x' = x cos - y sin
+                        } else { // 270 degrees
+                             x_rot = x_rel * 0 + y_rel * 1; // cos(90)=0, sin(90)=1
+                             y_rot = x_rel * -1 + y_rel * 0; // sin(90)=1, cos(90)=0
+                        }
+
+                        // Translate back to matrix coordinates
+                        const sourceX = Math.round(x_rot + cx);
+                        const sourceY = Math.round(y_rot + cy);
+
+                        // Copy pixel if it's within the original matrix's bounds
+                        if (sourceX >= 0 && sourceX < w && sourceY >= 0 && sourceY < h) {
+                            temp[y_new][x_new] = this.matrix[sourceY][sourceX];
+                        }
+                    }
+                }
             }
-        
+            
             this.matrix = temp;
         }
 
@@ -350,7 +379,7 @@ namespace ledmatrixxy {
          * Print a character centered on the display
          * @param ch single character to display
          */
-        //% block="%ledmatrix|print character %ch"
+        //% block="%ledmatrix|print character %ch with color %rgb=ledmatrixxy_colors"
         //% weight=60
         //% group="Configuration"
         //% parts="ledmatrixxy"
@@ -358,12 +387,14 @@ namespace ledmatrixxy {
         //% blockGap=8
         printChar(ch: string, rgb: number = 0xffffff): void {
             if (!ch || ch.length === 0 || ch.length > 1) return;
-            const cols = LEDMatrix.font[ch.toUpperCase()] || LEDMatrix.font[" "];
+            const cols = LEDMatrix.font[ch.toUpperCase()] || LEDMatrix.font["?"]; // Use '?' for unknown chars
             const charWidth = cols.length;
             const offsetX = Math.max(0, Math.floor((this.width - charWidth) / 2));
-            const offsetY = Math.max(0, Math.floor((this.height - 7) / 2));
+            // Use font height of 6 and Math.floor() for centering
+            const offsetY = Math.max(0, Math.floor((this.height - 6) / 2));
             for (let x = 0; x < cols.length && (x + offsetX) < this.width; x++) {
-                for (let y = 0; y < 7 && (y + offsetY) < this.height; y++) {
+                // Loop 6 times for the new 6-pixel high font
+                for (let y = 0; y < 6 && (y + offsetY) < this.height; y++) {
                     const bit = (cols[x] >> y) & 0x01;
                     this.matrix[y + offsetY][x + offsetX] = bit ? rgb : 0x000000;
                 }
@@ -381,28 +412,39 @@ namespace ledmatrixxy {
         //% trackArgs=0
         //% blockGap=8
         show(): void {
-            let i = 0
-            for (let y = 0; y < this.height; y++) {
-                for (let x = 0; x < this.width; x++) {
-                    let col = this.snake && y % 2 ? (this.width - 1 - x) : x
-                    let rgb = this.matrix[y][col]
-                    let w = (rgb >> 24) & 0xFF
-                    let r = (rgb >> 16) & 0xFF
-                    let g = (rgb >> 8) & 0xFF
-                    let b = rgb & 0xFF
+            let i = 0; // buffer index
+            // Iterate through each PHYSICAL pixel of the matrix
+            for (let y_physical = 0; y_physical < this.height; y_physical++) {
+                for (let x_physical = 0; x_physical < this.width; x_physical++) {
+                    // Determine the conceptual matrix coordinates (x_matrix, y_matrix) to read from
+                    // for the current physical pixel (x_physical, y_physical).
+
+                    // Adjust X for snake layout. Snake wiring reverses columns on odd physical rows.
+                    const x_matrix = (this.snake && (y_physical % 2 != 0)) ? (this.width - 1 - x_physical) : x_physical;
+                    
+                    // Adjust Y for the starting corner setting (vertical mirror).
+                    const y_matrix = this.row0_at_bottom ? (this.height - 1 - y_physical) : y_physical;
+
+                    const rgb = this.matrix[y_matrix][x_matrix];
+                    
+                    const w = (rgb >> 24) & 0xFF;
+                    const r = (rgb >> 16) & 0xFF;
+                    const g = (rgb >> 8) & 0xFF;
+                    const b = rgb & 0xFF;
+
                     if (this.mode === LEDControlMode.GRB) {
-                        this.buffer.setUint8(i++, g)
-                        this.buffer.setUint8(i++, r)
-                        this.buffer.setUint8(i++, b)
+                        this.buffer.setUint8(i++, g);
+                        this.buffer.setUint8(i++, r);
+                        this.buffer.setUint8(i++, b);
                     } else if (this.mode === LEDControlMode.GRBW) {
-                        this.buffer.setUint8(i++, g)
-                        this.buffer.setUint8(i++, r)
-                        this.buffer.setUint8(i++, b)
-                        this.buffer.setUint8(i++, w)
+                        this.buffer.setUint8(i++, g);
+                        this.buffer.setUint8(i++, r);
+                        this.buffer.setUint8(i++, b);
+                        this.buffer.setUint8(i++, w);
                     } else if (this.mode === LEDControlMode.RGB) {
-                        this.buffer.setUint8(i++, r)
-                        this.buffer.setUint8(i++, g)
-                        this.buffer.setUint8(i++, b)
+                        this.buffer.setUint8(i++, r);
+                        this.buffer.setUint8(i++, g);
+                        this.buffer.setUint8(i++, b);
                     }
                 }
             }
@@ -413,7 +455,8 @@ namespace ledmatrixxy {
          * Print a scrolling line of text
          * @param text string to scroll
          */
-        //% block="%ledmatrix|print line %text"
+        //% block="%ledmatrix|print line %text with color %rgb=ledmatrixxy_colors at speed %speed"
+        //% speed.defl=120
         //% weight=59
         //% group="Output"
         //% parts="ledmatrixxy"
@@ -425,7 +468,7 @@ namespace ledmatrixxy {
 
             for (let i = 0; i < text.length; i++) {
                 const ch = text.charAt(i).toUpperCase();
-                const cols = LEDMatrix.font[ch] || LEDMatrix.font[" "];
+                const cols = LEDMatrix.font[ch] || LEDMatrix.font["?"]; // Use '?' for unknown chars
                 for (let col of cols) {
                     buffer.push(col);
                 }
@@ -436,15 +479,18 @@ namespace ledmatrixxy {
 
             const totalCols = buffer.length;
             const visibleCols = this.width;
+            // Add vertical centering offset for 6-pixel high font using Math.floor()
+            const offsetY = Math.max(0, Math.floor((this.height - 6) / 2));
 
             for (let offset = 0; offset <= totalCols - visibleCols; offset++) {
                 this.clear();
                 for (let x = 0; x < visibleCols; x++) {
                     if (offset + x < totalCols) {
                         const colByte = buffer[offset + x];
-                        for (let y = 0; y < 7 && y < this.height; y++) {
+                        // Loop 6 times for the new 6-pixel high font
+                        for (let y = 0; y < 6 && (y + offsetY) < this.height; y++) {
                             const bit = (colByte >> y) & 0x01;
-                            this.matrix[y][x] = bit ? rgb : 0x000000;
+                            this.matrix[y + offsetY][x] = bit ? rgb : 0x000000;
                         }
                     }
                 }
@@ -465,18 +511,19 @@ namespace ledmatrixxy {
      * @param width width of LED Matrix, eg: 8
      * @param length length of LED Matrix, eg: 8
      * @param snake Type of LED Matrix: true if the rows of LEDs are routed like snake (each row starts from the end of the previous row)
-     * @param mode LED control sequence, GRB is the default unless you know otherwise
+     * @param row0_at_bottom true if row 0 of the matrix is at the physical bottom corner
+     * @param mode LED control sequence, GRB is the default
      */
-    //% blockId="ledmatrixxy_create" block="LedMatrixXY at pin %pin|of width %width and length %length|snake-style %snake LED control sequence %mode"
-    //% snake.defl=true
+    //% blockId="ledmatrixxy_create" block="LedMatrixXY at pin %pin|width %width length %length|snake-style %snake|row 0 at bottom %row0_at_bottom|LED control sequence %mode"
+    //% width.defl=8 length.defl=8 snake.defl=true row0_at_bottom.defl=false
     //% weight=90
     //% group="Configuration"
     //% parts="ledmatrixxy"
     //% trackArgs=0,2
     //% blockSetVariable=ledmatrix
     //% blockGap=8
-    export function create(pin: DigitalPin, width: number = 8, length: number = 8, snake: boolean = true, mode: LEDControlMode = LEDControlMode.GRB): LEDMatrix {
-        let matrix = new LEDMatrix(width, length, snake, mode);
+    export function create(pin: DigitalPin, width: number = 8, length: number = 8, snake: boolean = true, row0_at_bottom: boolean = false, mode: LEDControlMode = LEDControlMode.GRB): LEDMatrix {
+        let matrix = new LEDMatrix(width, length, snake, row0_at_bottom, mode);
         matrix.pin = pin
         return matrix;
     }
@@ -495,10 +542,8 @@ namespace ledmatrixxy {
     /**
      * Just a forwarder for replacing the predefined color selectors with custom value
     */
-    //% weight=2
-    //% blockId="ledmatrixxy_customcolor" block="RGB value %color"
-    //% group="Variables"
-    //% blockGap=8
+    //% weight=2 blockId="ledmatrixxy_customcolor" block="RGB value %color"
+    //% group="Variables" blockGap=8
     export function customcolor(color: number): number {
         return color;
     }
@@ -566,10 +611,7 @@ namespace ledmatrixxy {
             r$ = c; g$ = 0; b$ = x;
         }
         let m = Math.idiv((Math.idiv((l * 2 << 8), 100) - c), 2);
-        let r = r$ + m;
-        let g = g$ + m;
-        let b = b$ + m;
+        let r = r$ + m; let g = g$ + m; let b = b$ + m;
         return packRGB(r, g, b);
     }
-
 }
