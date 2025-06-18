@@ -11,8 +11,11 @@ It allows for easy configuration of matrix size and layout, with powerful blocks
 
 ## Physical LED Matrix connection
 The connection diagram is referenced from [Neopixel documentation page](https://microbit-micropython.readthedocs.io/en/v1.0.1/neopixel.html):
+
 ![micro:bit LED connection diagram](images/microbit_leds_example_connection.png)
+
 Instead of connecting the LED matrix to VDD and GND from micro:bit, it can be connected to external power supply. In such case need to connect GND from micro:bit to GND from the external power supply:
+
 ![micro:bit_LED connection diagram_with external_power](images/microbit_leds_example_w_power.png)
 
 ## How to Use
