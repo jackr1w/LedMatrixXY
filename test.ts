@@ -70,8 +70,10 @@ describe("ledmatrixxy.colors", () => {
 });
 
 // --- VISUAL TESTS ---
-// These tests will run on the simulator. Observe the 8x8 matrix
-// display in the simulator to verify the output is correct.
+// These tests are provided, but simulator will not be of any help here.
+// The same code should be implemented and tested physically in the connected
+// display setup to verify the output is correct.
+// The verification was done on 8x8 display only.
 
 // Create a matrix instance for visual tests
 // NOTE: For tests, we use a virtual pin like `DigitalPin.P0`.
