@@ -1,23 +1,78 @@
-# WIP - 8x8 and potentially X*Y LED Matrix driver for micro:bit
+# MakeCode Extension for LED Matrix (WS2812)
 
-The makecode extension code is based on https://github.com/Microsoft/pxt-neopixel, branched off https://github.com/51bit/colorbit and developed for generic 8x8 WS2812B boards sold on AliExpress, with the intention of updating it to support X*Y boards if it works out.
+[![MakeCode](https://img.shields.io/badge/MakeCode-approved-green.svg)](https://makecode.microbit.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-**Example 8x8 LED Matrix**
+This extension provides a full-featured driver for controlling WS2812-based (NeoPixel-compatible) LED matrices of any dimension on the BBC micro:bit.
 
-## Basic Usage
+It allows for easy configuration of matrix size and layout, with powerful blocks for setting individual pixels, drawing text, scrolling, and performing transformations like shifting, rotating, and flipping.
 
-```blocks
-TODO
-```
+## How to Use
 
-Use ``||create||`` with default settings to initialize the LED Matrix.
+1.  Open the [MakeCode Editor for micro:bit](https://makecode.microbit.org/).
+2.  Click on **Advanced** and then **Extensions**.
+3.  Search for `https://github.com/jackr1w/LedMatrixXY` and click to add it to your project.
 
-![Alt text](https://github.com/51bit/ColorBit/raw/master/GIF0.gif?raw=true "Basic Usage")
+## Blocks
 
-## Supported targets
+The extension is organized into three convenient groups:
 
-* for PXT/microbit
+### Configuration
 
-## License
+These blocks are used to set up the matrix and manipulate its contents.
 
-MIT
+* **LedMatrixXY at pin ...**: The main block to initialize your matrix. Define the data pin, dimensions, and layout type.
+    ```blocks
+    let ledmatrix = ledmatrixxy.create(DigitalPin.P0, 8, 8, true, ledmatrixxy.LEDControlMode.GRB)
+    ```
+* **set pixel at X Y to color**: Sets a single pixel at a specific coordinate to a given color.
+* **fill with color**: Fills the entire matrix with a single color.
+* **clear**: Clears the entire matrix (sets all pixels to black).
+* **shift X/Y**: Shifts the matrix content horizontally or vertically.
+* **rotate**: Rotates the entire matrix by 90°, 180°, or 270°.
+* **flip horizontally/vertically**: Mirrors the matrix content.
+
+### Output
+
+These blocks are used to display content on the matrix.
+
+* **show**: **This is the most important block!** Changes made with other blocks are not visible until you call `show`. This block sends the data to the LEDs.
+    ```blocks
+    ledmatrix.show()
+    ```
+* **print character**: Displays a single character in the center of the matrix.
+* **print line**: Scrolls a line of text across the matrix.
+
+### Variables
+
+These blocks provide easy ways to create and manage colors.
+
+* **color dropdown**: A list of common, predefined colors.
+* **RGB value**: Input a custom color using a hex value (e.g., `0xFF7000`).
+* **Red Green Blue**: Create a color from its R, G, B components.
+* **Red Green Blue White**: Create a color for RGB+W strips.
+* **hue saturation luminosity**: Create a color using the HSL color model, great for rainbow effects.
+
+## Example: Rainbow Scroll
+
+This example shows how to create a scrolling rainbow effect across an 8x8 matrix.
+
+```typescript
+let ledmatrix = ledmatrixxy.create(
+    DigitalPin.P0,
+    8,
+    8,
+    true,
+    ledmatrixxy.LEDControlMode.GRB
+)
+
+basic.forever(function () {
+    for (let i = 0; i < 360; i++) {
+        ledmatrix.shiftX(-1, true)
+        for (let y = 0; y < 8; y++) {
+            ledmatrix.setPixel(7, y, ledmatrixxy.hsl(i, 99, 50))
+        }
+        ledmatrix.show()
+        basic.pause(20)
+    }
+})
