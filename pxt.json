@@ -1,17 +1,18 @@
 {
     "name": "ledmatrixxy",
-    "version": "0.0.1",
-    "description": "LED Matrix X*Y",
+    "version": "1.0.0",
+    "description": "A full-featured driver for WS2812 (NeoPixel) compatible LED matrices of any size. Supports text, scrolling, and transformations.",
     "license": "MIT",
     "dependencies": {
         "core": "*",
-        "ws2812b": "github:Microsoft/pxt-ws2812b#v0.1.2"
+        "ws2812b": "github:microsoft/pxt-ws2812b#v0.1.2"
     },
     "files": [
-        "README.md",
         "main.ts",
-        "coloricons.jres",
-        "_locales/zh/colorbit-strings.json"
+        "README.md"
+    ],
+    "testFiles": [
+        "test.ts"
     ],
     "public": true
 }
