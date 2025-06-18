@@ -4,6 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 This extension provides a full-featured driver for controlling WS2812-based (NeoPixel-compatible) LED matrices of any dimension on the BBC micro:bit.
+
 The extension code is based on https://github.com/Microsoft/pxt-neopixel, branched off https://github.com/51bit/colorbit (though eventually completely rewritten, so no reference of Colorbit remains) and developed for generic 8x8 WS2812B boards sold on AliExpress, with the intention of supporting any X*Y LED matrices.
 
 It allows for easy configuration of matrix size and layout, with powerful blocks for setting individual pixels, drawing text, scrolling, and performing transformations like shifting, rotating, and flipping.
