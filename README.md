@@ -14,6 +14,7 @@ It allows for easy configuration of matrix size and layout, with powerful blocks
 1.  Open the [MakeCode Editor for micro:bit](https://makecode.microbit.org/).
 2.  Click on **Advanced** and then **Extensions**.
 3.  Search for `https://github.com/jackr1w/LedMatrixXY` and click to add it to your project.
+4.  Connect Micro:bit to the LED board by a data pin of choice and provide power to the LED board.
 
 ## Blocks
 
