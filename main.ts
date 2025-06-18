@@ -403,7 +403,6 @@ namespace ledmatrixxy {
         
         /**
          * Render the LED matrix (create the buffer and send it to display).
-         * @param matrix LEDMatrix object
          */
         //% blockId="ledmatrixxy_show" block="%ledmatrix|show"
         //% weight=79
@@ -453,7 +452,9 @@ namespace ledmatrixxy {
 
         /**
          * Print a scrolling line of text
-         * @param text string to scroll
+         * @param text String to scroll
+         * @param rgb Color to use
+         * @param speed Speed - scroll delay in milliseconds
          */
         //% block="%ledmatrix|print line %text with color %rgb=ledmatrixxy_colors at speed %speed"
         //% speed.defl=120
@@ -462,7 +463,7 @@ namespace ledmatrixxy {
         //% parts="ledmatrixxy"
         //% trackArgs=0
         //% blockGap=8
-        printLine(text: string, speed: number = 120, rgb: number = 0xffffff): void {
+        printLine(text: string, rgb: number = 0xffffff, speed: number = 120): void {
             const gap = 1;
             const buffer: number[] = [];
 
