@@ -74,6 +74,7 @@ let ledmatrix = ledmatrixxy.create(
     8,
     8,
     true,
+    false,
     ledmatrixxy.LEDControlMode.GRB
 )
 
