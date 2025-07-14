@@ -34,7 +34,7 @@ These blocks are used to set up the matrix and manipulate its contents.
 
 * **LedMatrixXY at pin ...**: The main block to initialize your matrix. Define the data pin, dimensions, and layout type.
     ```blocks
-    let ledmatrix = ledmatrixxy.create(DigitalPin.P0, 8, 8, true, ledmatrixxy.LEDControlMode.GRB)
+    let ledmatrix = ledmatrixxy.create(DigitalPin.P0, 8, 8, true, true, ledmatrixxy.LEDControlMode.GRB)
     ```
 * **set pixel at X Y to color**: Sets a single pixel at a specific coordinate to a given color.
 * **fill with color**: Fills the entire matrix with a single color.
